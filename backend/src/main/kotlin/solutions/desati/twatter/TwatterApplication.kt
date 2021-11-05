@@ -9,3 +9,5 @@ class TwatterApplication
 fun main(args: Array<String>) {
     runApplication<TwatterApplication>(*args)
 }
+
+const val port = 7686

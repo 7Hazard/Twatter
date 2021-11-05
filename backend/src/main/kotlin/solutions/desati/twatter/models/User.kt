@@ -7,7 +7,8 @@ class User (
     @Id
     @GeneratedValue
     var id: Long? = null,
-    val email: String,
-    val name: String,
-    val hashedPassword: String
+    var email: String,
+    var username: String,
+    var name: String,
+    var hashedPassword: String
 )

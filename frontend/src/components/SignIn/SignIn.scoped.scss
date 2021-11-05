@@ -1,0 +1,38 @@
+section {
+  margin: 10em auto;
+  width: 70%;
+
+  display: flex;
+  justify-content: space-evenly;
+
+  background-color: rgb(0, 73, 122);
+  border-radius: 7px;
+}
+
+form {
+    padding: 2em 1.5em;
+    width: 100%;
+}
+
+input {
+    width: 95%;
+    box-sizing: border-box;
+    height: 2.5em;
+    margin: 0.5em 0;
+}
+
+form h1 {
+    width: 100%;
+    margin-top: 0;
+    text-align: center;
+    color: whitesmoke;
+}
+
+.signin {
+}
+
+.signup {
+    border-left: solid;
+    border-width: 1px;
+    border-color: gray;
+}
