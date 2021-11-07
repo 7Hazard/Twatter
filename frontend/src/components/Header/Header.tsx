@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
+import { getCookie, getToken, isAuthenticated } from "../../cookies";
 import "./Header.scoped.scss";
 
 export default function() {
-  let signedIn = false;
-
   return (
     <header>
       <Link to="/"><img className="logo" src="/logo.gif" alt="Twatter Logo" /></Link>
-      {signedIn ? (
+      {isAuthenticated() ? (
         <nav>
           <Link to="/feed">Feed</Link>
           <Link to="/signout">Sign Out</Link>

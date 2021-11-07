@@ -1,26 +1,32 @@
-import React from "react";
-import "./SignIn.scoped.scss";
+import "./Auth.scoped.scss";
 
 export default function() {
-  let [error, setError] = React.useState("");
+  //   let [error, setError] = React.useState("");
 
   return (
     <section>
       <form
         className="signin"
-        onSubmit={(event) => {
-          event.preventDefault();
-          setError("Error")
-          console.log("sign in");
-        }}
+        // onSubmit={(event) => {
+        //   event.preventDefault();
+        //   setError("Error");
+        //   console.log("sign in");
+        // }}
       >
-        <h1>Sign in</h1>
-        <p>{error}</p>
+        <h1>Login</h1>
+        {/* <p>{error}</p>
         <input type="email" placeholder="email" />
         <input type="password" placeholder="password" />
-        <input type="submit" value="Sign In" />
+        <input type="submit" value="Sign In" /> */}
+        <a
+          className="button-link"
+          href="https://github.com/login/oauth/authorize?client_id=f370994586d726afd433"
+        >
+          <img src="github.png" />
+          Login with Github
+        </a>
       </form>
-      <form
+      {/* <form
         className="signup"
         onSubmit={(event) => {
           console.log("sign up");
@@ -32,7 +38,7 @@ export default function() {
         <input type="text" placeholder="username" />
         <input type="password" placeholder="password" />
         <input type="submit" value="Sign Up" />
-      </form>
+      </form> */}
     </section>
   );
 }

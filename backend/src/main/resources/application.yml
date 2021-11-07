@@ -1,0 +1,6 @@
+twatter:
+  auth:
+    redirect: http://localhost:3000
+    github:
+      client_id: f370994586d726afd433
+
