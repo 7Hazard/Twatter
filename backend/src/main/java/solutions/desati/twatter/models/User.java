@@ -19,6 +19,7 @@ public class User {
 
     public String name;
 
+    @Column(unique = true)
     public String githubId;
 
     @Override
