@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @ToString
@@ -21,6 +22,10 @@ public class User {
 
     @Column(unique = true)
     public String githubId;
+
+    @Getter
+    @OneToMany(mappedBy = "user")
+    private Set<UserToken> tokens;
 
     @Override
     public boolean equals(Object o) {

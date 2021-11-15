@@ -45,7 +45,7 @@ public class AuthController {
     public ResponseEntity loginWithGithub(String code, HttpServletResponse response) {
         try {
             var accessToken = authService.authWithGithub(code);
-            response.sendRedirect(redirect + "/?token=" + accessToken);
+            response.sendRedirect(redirect + "?token=" + accessToken);
             return new ResponseEntity(HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

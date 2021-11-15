@@ -32,9 +32,9 @@ function SignedRoutes() {
     // can happen that user puts in invalid token in query params
     setCookie("token", token as string, 1);
     window.history.pushState(null, "", "/");
-
-    // TODO see if it's a new user, check his user status
   }
+  
+  // TODO see if it's a new user, check his user status
 
   if (isAuthenticated())
     return (
