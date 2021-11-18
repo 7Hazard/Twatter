@@ -6,7 +6,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
+@Entity(name = "_user")
 @ToString
 @RequiredArgsConstructor
 public class User {

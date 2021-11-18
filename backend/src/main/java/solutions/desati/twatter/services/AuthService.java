@@ -1,6 +1,5 @@
 package solutions.desati.twatter.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -13,21 +12,24 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import solutions.desati.twatter.models.User;
+import solutions.desati.twatter.models.UserToken;
 import solutions.desati.twatter.repositories.UserRepository;
+import solutions.desati.twatter.repositories.UserTokenRepository;
 
 import java.util.List;
 
 @Service
 public class AuthService {
 
-    final UserRepository userRepository;
-    final UserService userService;
-
     @Value("${twatter.auth.github.client_id}")
     private String githubClientId;
 
-    public AuthService(UserRepository userRepository, UserService userService) {
+    final UserRepository userRepository;
+    final UserTokenRepository userTokenRepository;
+    final UserService userService;
+    public AuthService(UserRepository userRepository, UserTokenRepository userTokenRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userTokenRepository = userTokenRepository;
         this.userService = userService;
     }
 
@@ -112,19 +114,30 @@ public class AuthService {
             userRepository.save(user);
         }
 
-        // TODO generate session token for user, store in db
+        var token = generateToken(user);
 
-        // TODO send generated to user
-        return accessToken;
+        return token.getId().toString();
     }
 
-    public String generateToken(User user) {
-        // TODO
-        return null;
+    public UserToken generateToken(User user) {
+        var token = new UserToken(user);
+        userTokenRepository.save(token);
+        return token;
     }
 
     public boolean validateToken(String token) {
-        // TODO validate with UserTokenRepository
-        return true;
+        var utoken = userTokenRepository.findById(Long.parseLong(token));
+        if(utoken != null)
+            return true;
+
+        // TODO check if expired
+
+        return false;
+    }
+
+    public User getUserFromToken(String _token) {
+        // TODO get token id from JWT
+        var token = userTokenRepository.findById(Long.parseLong(_token));
+        return token != null ? token.getUser() : null;
     }
 }

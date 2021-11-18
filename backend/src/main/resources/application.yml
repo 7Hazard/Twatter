@@ -4,3 +4,23 @@ twatter:
     github:
       client_id: f370994586d726afd433
 
+spring:
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate.ddl-auto: create-drop
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: "postgres"
+    password: "jizzle"
+
+  sql:
+    init:
+      mode: always
+      platform: postgres

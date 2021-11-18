@@ -16,14 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
-    @Autowired
-    AuthService authService;
-
     @Value("${twatter.auth.redirect}")
     private String redirect;
     @Value("${twatter.auth.github.client_id}")
     private String githubClientId;
+
+    final AuthService authService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @GetMapping
     public ResponseEntity info() {

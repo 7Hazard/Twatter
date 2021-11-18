@@ -12,8 +12,10 @@ import Feed from "../Feed/Feed";
 import SignIn from "../Auth/Auth";
 import Auth from "../Auth/Auth";
 import { isAuthenticated, setCookie } from "../../cookies";
+import { getStatus } from "../../api";
+import React from "react";
 
-export default function() {
+export default function () {
   // order important, header must be after SignedRoutes (token check)
   return (
     <Router>
@@ -24,6 +26,8 @@ export default function() {
 }
 
 function SignedRoutes() {
+  const [status, setStatus] = React.useState()
+
   // check if assigned new token, this can perhaps be done in a better way
   let location = useLocation();
   let token = new URLSearchParams(location.search).get("token");
@@ -33,16 +37,24 @@ function SignedRoutes() {
     setCookie("token", token as string, 1);
     window.history.pushState(null, "", "/");
   }
-  
-  // TODO see if it's a new user, check his user status
 
-  if (isAuthenticated())
+  if (isAuthenticated() && status === undefined) {
+    setStatus(null)
+    getStatus().then(s =>
+
+
+      setStatus(s.data)
+    )
+    return null
+  }
+  if (isAuthenticated()) {
     return (
       <Routes>
         <Route path="/" element={<Feed />} />
         <Route path="/:username" element={<Feed />} />
       </Routes>
     );
+  }
   else {
     return (
       <Routes>

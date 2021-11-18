@@ -21,8 +21,21 @@ export function getCookie(key: string) {
   return null;
 }
 
+export function deleteCookie(key: string, path: string = "", domain: string = "") {
+  if( getCookie( key ) ) {
+    document.cookie = key + "=" +
+      ((path) ? ";path="+path:"")+
+      ((domain)?";domain="+domain:"") +
+      ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+  }
+}
+
 export function getToken() {
     return getCookie("token")
+}
+
+export function deleteToken() {
+  deleteCookie("token")
 }
 
 export function isAuthenticated() {
