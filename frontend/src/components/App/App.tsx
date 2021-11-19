@@ -40,11 +40,7 @@ function SignedRoutes() {
 
   if (isAuthenticated() && status === undefined) {
     setStatus(null)
-    getStatus().then(s =>
-
-
-      setStatus(s.data)
-    )
+    getStatus().then(s => setStatus(s.data))
     return null
   }
   if (isAuthenticated()) {

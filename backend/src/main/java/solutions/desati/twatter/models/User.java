@@ -27,6 +27,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserToken> tokens;
 
+    @Getter
+    @OneToMany(mappedBy = "author")
+    private Set<Post> posts;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
