@@ -1,13 +1,15 @@
 package solutions.desati.twatter.controllers;
 
 import lombok.Data;
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import solutions.desati.twatter.models.Post;
+import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.services.AuthService;
 import solutions.desati.twatter.services.PostService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/post")
@@ -21,21 +23,21 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity single(@PathVariable Long id) {
+    public ResponseEntity getSingle(@PathVariable Long id) {
         return postService.get(id)
                 .map(post -> new ResponseEntity(post.getView(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
-    static @Data class Create {
-        private String content;
+    static @Data class GetBulk { private List<Long> ids; }
+    @GetMapping
+    public ResponseEntity getBulk(@RequestBody GetBulk body) {
+        return new ResponseEntity(Post.viewList(postService.getBulk(body.ids)), HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity create(@RequestBody Create body, @RequestHeader String Authorization) {
-        var token = Authorization.replace("Bearer ", "");
-        var user = authService.getUserFromToken(token);
-        if(user == null) return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
+    static @Data class Create { private String content; }
+    @PostMapping
+    public ResponseEntity create(@RequestBody Create body, @RequestAttribute User user) {
         var post = postService.create(user, body.content);
         return new ResponseEntity(post.getView(), HttpStatus.OK);
     }

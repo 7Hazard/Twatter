@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @ToString
@@ -21,7 +22,7 @@ public class Post {
     @ManyToOne
     public User author;
 
-    static @Data class View {
+    public static @Data class View {
         private Long id;
         private String content;
         private Long userId;
@@ -32,5 +33,8 @@ public class Post {
         view.content = this.content;
         view.userId = this.author.getId();
         return view;
+    }
+    public static List<View> viewList(List<Post> posts) {
+        return posts.stream().map(Post::getView).toList();
     }
 }
