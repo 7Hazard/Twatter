@@ -6,7 +6,7 @@ twatter:
 
 spring:
   jpa:
-    show-sql: true
+#    show-sql: true
     generate-ddl: true
     hibernate.ddl-auto: update
     properties:

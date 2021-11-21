@@ -4,10 +4,11 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "_user")
-@ToString
+//@ToString
 @RequiredArgsConstructor
 public class User {
     @Id
@@ -31,16 +32,52 @@ public class User {
     @OneToMany(mappedBy = "author")
     private Set<Post> posts;
 
+    @Getter
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "_user_followers",
+            joinColumns = @JoinColumn(name = "followed"),
+            inverseJoinColumns = @JoinColumn(name = "following"))
+    private Set<User> followers;
+
+    @Getter
+    @ManyToMany(mappedBy = "followers", cascade = CascadeType.REMOVE)
+    private Set<User> following;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
+        if (o != null) {
+            Hibernate.getClass(this);
+            Hibernate.getClass(o);
+        }
         return false;
     }
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @ToString
+    @AllArgsConstructor
+    public static @Data class View {
+        private Long id;
+        private String username;
+        private String name;
+        private String githubId;
+    }
+    public View view() {
+        return new View(
+                id,
+                username,
+                name,
+                githubId
+        );
+    }
+    public static List<View> view(List<User> posts) {
+        return posts.stream().map(User::view).toList();
+    }
+    public static List<View> view(Set<User> posts) {
+        return posts.stream().map(User::view).toList();
     }
 }

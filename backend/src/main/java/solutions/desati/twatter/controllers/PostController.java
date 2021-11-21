@@ -25,20 +25,20 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity getSingle(@PathVariable Long id) {
         return postService.get(id)
-                .map(post -> new ResponseEntity(post.getView(), HttpStatus.OK))
+                .map(post -> new ResponseEntity(post.view(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
     static @Data class GetBulk { private List<Long> ids; }
     @GetMapping
     public ResponseEntity getBulk(@RequestBody GetBulk body) {
-        return new ResponseEntity(Post.viewList(postService.getBulk(body.ids)), HttpStatus.OK);
+        return new ResponseEntity(Post.view(postService.getBulk(body.ids)), HttpStatus.OK);
     }
 
     static @Data class Create { private String content; }
     @PostMapping
     public ResponseEntity create(@RequestBody Create body, @RequestAttribute User user) {
         var post = postService.create(user, body.content);
-        return new ResponseEntity(post.getView(), HttpStatus.OK);
+        return new ResponseEntity(post.view(), HttpStatus.OK);
     }
 }

@@ -12,10 +12,9 @@ import solutions.desati.twatter.interceptors.AuthInterceptor;
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+
     final AuthInterceptor authInterceptor;
-    final ApplicationContext appContext;
-    public WebConfig(ApplicationContext appContext, AuthInterceptor authInterceptor) {
-        this.appContext = appContext;
+    public WebConfig(AuthInterceptor authInterceptor) {
         this.authInterceptor = authInterceptor;
     }
 
@@ -29,6 +28,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authInterceptor).addPathPatterns(
                 "/user/status",
                 "/user/details",
+                "/user/feed",
+                "/user/*/follow",
+                "/user/*/unfollow",
                 "/post" // TODO only POST endpoint
         );
     }

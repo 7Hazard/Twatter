@@ -1,5 +1,6 @@
 package solutions.desati.twatter.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
@@ -22,19 +23,21 @@ public class Post {
     @ManyToOne
     public User author;
 
+    @ToString
+    @AllArgsConstructor
     public static @Data class View {
         private Long id;
         private String content;
-        private Long userId;
+        private User.View author;
     }
-    public View getView() {
-        var view = new View();
-        view.id = this.id;
-        view.content = this.content;
-        view.userId = this.author.getId();
-        return view;
+    public View view() {
+        return new View(
+                id,
+                content,
+                author.view()
+        );
     }
-    public static List<View> viewList(List<Post> posts) {
-        return posts.stream().map(Post::getView).toList();
+    public static List<View> view(List<Post> posts) {
+        return posts.stream().map(Post::view).toList();
     }
 }
