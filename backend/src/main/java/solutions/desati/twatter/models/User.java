@@ -29,10 +29,6 @@ public class User {
     private Set<UserToken> tokens;
 
     @Getter
-    @OneToMany(mappedBy = "author")
-    private Set<Post> posts;
-
-    @Getter
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "_user_followers",
             joinColumns = @JoinColumn(name = "followed"),
@@ -42,6 +38,18 @@ public class User {
     @Getter
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.REMOVE)
     private Set<User> following;
+
+    @Getter
+    @OneToMany(mappedBy = "author")
+    private Set<Post> posts;
+
+    @Getter
+    @OneToMany(mappedBy = "from")
+    private Set<Message> sentMessages;
+
+    @Getter
+    @OneToMany(mappedBy = "to")
+    private Set<Message> recievedMessages;
 
     @Override
     public boolean equals(Object o) {
