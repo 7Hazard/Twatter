@@ -66,7 +66,7 @@ public class User {
         private String name;
         private String githubId;
     }
-    public View view() {
+    public View getView() {
         return new View(
                 id,
                 username,
@@ -74,10 +74,10 @@ public class User {
                 githubId
         );
     }
-    public static List<View> view(List<User> posts) {
-        return posts.stream().map(User::view).toList();
+    public static List<View> getView(List<User> posts) {
+        return posts.stream().map(User::getView).toList();
     }
-    public static List<View> view(Set<User> posts) {
-        return posts.stream().map(User::view).toList();
+    public static List<View> getView(Set<User> posts) {
+        return posts.stream().map(User::getView).toList();
     }
 }

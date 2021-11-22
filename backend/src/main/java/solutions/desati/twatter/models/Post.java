@@ -30,14 +30,14 @@ public class Post {
         private String content;
         private User.View author;
     }
-    public View view() {
+    public View getView() {
         return new View(
                 id,
                 content,
-                author.view()
+                author.getView()
         );
     }
-    public static List<View> view(List<Post> posts) {
-        return posts.stream().map(Post::view).toList();
+    public static List<View> getView(List<Post> posts) {
+        return posts.stream().map(Post::getView).toList();
     }
 }

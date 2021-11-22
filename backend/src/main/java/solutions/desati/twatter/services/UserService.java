@@ -38,13 +38,10 @@ public class UserService {
         return postRepository.findByAuthor_FollowersIsIn(Set.of(user));
     }
 
-    public void follow(User follower, User following) {
-        following.getFollowers().add(follower);
-        userRepository.save(following);
-    }
-
-    public void unfollow(User follower, User following) {
-        following.getFollowers().removeIf(user -> user.getId() == follower.getId());
+    public void toggleFollow(User follower, User following) {
+        var removed = following.getFollowers().removeIf(user -> user.getId() == follower.getId());
+        if(!removed)
+            following.getFollowers().add(follower);
         userRepository.save(following);
     }
 
