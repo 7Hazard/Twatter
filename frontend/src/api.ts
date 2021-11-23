@@ -10,11 +10,9 @@ export async function getStatus() {
         }
     })
 
-    if(!response.ok)
-    {
+    if (!response.ok) {
         // Invalid credentials
-        if(response.status == 401)
-        {
+        if (response.status == 401) {
             deleteToken()
             window.location.reload()
         }
@@ -26,3 +24,38 @@ export async function getStatus() {
 
     return { status: response.status, data: json }
 }
+
+let fakedata = `
+[
+    {
+        "id": 6,
+        "content": "Hello my guys",
+        "author": {
+            "id": 4,
+            "username": "popularguy",
+            "name": null,
+            "githubId": null
+        }
+    },
+    {
+        "id": 3,
+        "content": "Whats up broski",
+        "author": {
+            "id": 6,
+            "username": "Mill3nium",
+            "name": null,
+            "githubId": null
+        }
+    }
+]
+`
+
+export function getFeed(): [{
+    id: number, content: string, author: {
+        id: number
+        username: string
+    }
+}] {
+    return JSON.parse(fakedata)
+}
+
