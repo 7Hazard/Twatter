@@ -26,11 +26,11 @@ public class AuthService {
 
     final UserRepository userRepository;
     final UserTokenRepository userTokenRepository;
-    final UserService userService;
+//    final UserService userService;
     public AuthService(UserRepository userRepository, UserTokenRepository userTokenRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userTokenRepository = userTokenRepository;
-        this.userService = userService;
+//        this.userService = userService;
     }
 
 //    /**

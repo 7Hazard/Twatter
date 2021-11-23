@@ -1,5 +1,6 @@
 package solutions.desati.twatter.interceptors;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import solutions.desati.twatter.services.AuthService;
