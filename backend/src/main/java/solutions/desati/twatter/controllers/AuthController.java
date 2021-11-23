@@ -1,8 +1,7 @@
 package solutions.desati.twatter.controllers;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,29 +26,21 @@ public class AuthController {
 
     @GetMapping
     public ResponseEntity info() {
-        try {
-            var json = new JSONObject();
-            json.put("redirect", redirect);
-            json.put("github.client_id", githubClientId);
+        var json = new JSONObject();
+        json.put("redirect", redirect);
+        json.put("github.client_id", githubClientId);
 
-            // debug
-            json.put("github.client_secret", System.getenv("TWATTER_GITHUB_CLIENT_SECRET"));
+        // debug
+        json.put("github.client_secret", System.getenv("TWATTER_GITHUB_CLIENT_SECRET"));
 
-            return new ResponseEntity(json.toString(), HttpStatus.OK);
-        } catch (JSONException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(json.toString(), HttpStatus.OK);
     }
 
     @GetMapping("/oauth2/github")
-    public ResponseEntity loginWithGithub(String code, HttpServletResponse response) {
-        try {
-            var accessToken = authService.authWithGithub(code);
-            response.sendRedirect(redirect + "?token=" + accessToken);
-            return new ResponseEntity(HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity loginWithGithub(String code, HttpServletResponse response) throws Exception {
+        var accessToken = authService.authWithGithub(code);
+        response.sendRedirect(redirect + "?token=" + accessToken);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 //    @PostMapping("/signin")

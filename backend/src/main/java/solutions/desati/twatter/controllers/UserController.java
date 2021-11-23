@@ -1,8 +1,8 @@
 package solutions.desati.twatter.controllers;
 
 import lombok.Data;
-import net.minidev.json.JSONObject;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

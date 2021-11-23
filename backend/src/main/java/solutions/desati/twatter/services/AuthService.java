@@ -1,8 +1,7 @@
 package solutions.desati.twatter.services;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -70,7 +69,7 @@ public class AuthService {
 //        return user;
 //    }
 
-    public String authWithGithub(String code) throws JSONException {
+    public String authWithGithub(String code) {
         // Get
         String accessToken;
         {
