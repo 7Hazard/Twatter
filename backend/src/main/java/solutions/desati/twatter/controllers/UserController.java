@@ -103,7 +103,7 @@ public class UserController {
      * @param from
      * @return
      */
-    @GetMapping("{id}/messages")
+    @GetMapping("/{id}/messages")
     public ResponseEntity getMessages(@RequestAttribute User from, @PathVariable Long id) {
         var to = userService.getFromId(id);
         if(to == null) return new ResponseEntity("invalid id", HttpStatus.NOT_FOUND);

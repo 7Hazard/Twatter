@@ -2,6 +2,7 @@ package solutions.desati.twatter.models;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -14,7 +15,7 @@ public class UserToken {
     private Long id;
 
     @Getter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private User user;
 
     protected UserToken() {}

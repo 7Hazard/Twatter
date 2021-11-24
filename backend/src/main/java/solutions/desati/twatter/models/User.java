@@ -22,7 +22,7 @@ public class User {
     public String name;
 
     @Column(unique = true)
-    public String githubId;
+    public long githubId;
 
     @Getter
     @OneToMany(mappedBy = "user")
@@ -72,7 +72,7 @@ public class User {
         private Long id;
         private String username;
         private String name;
-        private String githubId;
+        private Long githubId;
     }
     public View getView() {
         return new View(
