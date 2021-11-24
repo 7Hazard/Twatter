@@ -32,4 +32,8 @@ public class PostService {
     public List<Post> getFromUser(Long id) {
         return postRepository.findByAuthor_Id(id);
     }
+
+    public List<Post> getFromUser(String username) {
+        return postRepository.findByAuthor_Username(username);
+    }
 }

@@ -62,67 +62,68 @@ public class UserController {
         return new ResponseEntity(Post.getView(userService.getFeed(user)), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/posts")
-    public ResponseEntity posts(@PathVariable Long id) {
-        return new ResponseEntity(Post.getView(postService.getFromUser(id)), HttpStatus.OK);
+    @GetMapping("/{username}/posts")
+    public ResponseEntity posts(@PathVariable String username) {
+        return new ResponseEntity(Post.getView(postService.getFromUser(username)), HttpStatus.OK);
     }
 
     static @Data class CreatePost { private String content; }
     /**
-     * id path variable is disregarded
+     * username path variable is disregarded
      * @param body
      * @param user
      * @return
      */
-    @PostMapping("/{id}/posts")
+    @PostMapping("/{username}/posts")
     public ResponseEntity createPost(@RequestBody CreatePost body, @RequestAttribute User user) {
         var post = postService.create(user, body.content);
         return new ResponseEntity(post.getView(), HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/followers")
-    public ResponseEntity unfollow(@RequestAttribute User user, @PathVariable Long id) {
-        var otherUser = userService.getFromId(id);
+    @PostMapping("/{username}/followers")
+    public ResponseEntity unfollow(@RequestAttribute User user, @PathVariable String username) {
+        var otherUser = userService.get(username);
         if(otherUser == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         userService.toggleFollow(user, otherUser);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/followers")
-    public ResponseEntity followers(@PathVariable Long id) {
-        var user = userService.getFromId(id);
+    @GetMapping("/{username}/followers")
+    public ResponseEntity followers(@PathVariable String username) {
+        var user = userService.get(username);
+        if(user == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
         var followers = user.getFollowers();
         var views = User.getView(followers);
         return new ResponseEntity(views, HttpStatus.OK);
     }
 
     /**
-     * id is 'to'
+     * username is 'to'
      * authed user is 'from'
      * @param from
      * @return
      */
-    @GetMapping("/{id}/messages")
-    public ResponseEntity getMessages(@RequestAttribute User from, @PathVariable Long id) {
-        var to = userService.getFromId(id);
-        if(to == null) return new ResponseEntity("invalid id", HttpStatus.NOT_FOUND);
+    @GetMapping("/{username}/messages")
+    public ResponseEntity getMessages(@RequestAttribute User from, @PathVariable String username) {
+        var to = userService.get(username);
+        if(to == null) return new ResponseEntity("invalid username", HttpStatus.NOT_FOUND);
         return new ResponseEntity(Message.getView(messageService.get(from, to)), HttpStatus.OK);
     }
 
     static @Data class SendMessage { private String content; }
     /**
-     * id is 'to'
+     * username is 'to'
      * authed user is 'from'
      * @param body
      * @param from
-     * @param id
+     * @param username
      * @return
      */
-    @PostMapping("{id}/messages")
-    public ResponseEntity sendMessage(@RequestBody SendMessage body, @RequestAttribute User from, @PathVariable Long id) {
-        var to = userService.getFromId(id);
-        if(to == null) return new ResponseEntity("invalid recipient id", HttpStatus.NOT_FOUND);
+    @PostMapping("/{username}/messages")
+    public ResponseEntity sendMessage(@RequestBody SendMessage body, @RequestAttribute User from, @PathVariable String username) {
+        var to = userService.get(username);
+        if(to == null) return new ResponseEntity("invalid recipient", HttpStatus.NOT_FOUND);
         return new ResponseEntity(messageService.send(from, to, body.content).getView(), HttpStatus.OK);
     }
 }

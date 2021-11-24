@@ -30,8 +30,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getFromId(Long id) {
+    public User get(Long id) {
         return userRepository.getById(id);
+    }
+
+    public User get(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public List<Post> getFeed(User user) {

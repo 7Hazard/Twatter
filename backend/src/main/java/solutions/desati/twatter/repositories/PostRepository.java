@@ -12,6 +12,7 @@ import java.util.Set;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthor(User author);
     List<Post> findByAuthor_Id(long id);
+    List<Post> findByAuthor_Username(String username);
     List<Post> findByAuthor_FollowersIsIn(Set<User> followers);
 
 }
