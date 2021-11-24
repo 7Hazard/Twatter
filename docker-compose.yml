@@ -1,15 +1,16 @@
 services:
-  frontend:
+  frontend1:
     build: ./frontend
+  frontend2:
+    build: ./frontend
+
+  frontend-balancer:
+    build: ./balancer
     ports:
       - "3000:80"
-
-  # frontend2:
-  #   build: ./frontend
-  #   ports:
-  #     - "3002:3000"
-  # frontend-loadbalancer:
-  #   image: httpd:2.4
+    links:
+      - frontend1
+      - frontend2
 
   backend:
     build: ./backend
@@ -29,5 +30,3 @@ services:
     ports:
       - "5432:5432"
 
-# volumes:
-#   logvolume01: {}
