@@ -8,8 +8,9 @@ export default function() {
       <Link to="/"><img className="logo" src="/logo.gif" alt="Twatter Logo" /></Link>
       {isAuthenticated() ? (
         <nav>
-          <Link to="/feed">Feed</Link>
+          <Link to="/">Feed</Link>
           <Link to="/signout">Sign Out</Link>
+          <Link to="/messages">Message</Link>
         </nav>
       ) : (
         <nav />

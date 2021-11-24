@@ -55,7 +55,33 @@ export function getFeed(): [{
         id: number
         username: string
     }
-}] {
+}]
+{
     return JSON.parse(fakedata)
+}
+
+let fakePosts = `
+[
+    {
+        "id": 6,
+        "content": "Hello my guys",
+        "author": {
+            "id": 4,
+            "username": "popularguy",
+            "name": null,
+            "githubId": null
+        }
+    }
+]
+`
+
+export function getPost(username:string): [{
+    id: number, content: string, author: {
+        id: number
+        username: string
+    }
+}]
+{
+    return JSON.parse(fakePosts);
 }
 

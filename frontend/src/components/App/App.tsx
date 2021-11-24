@@ -14,6 +14,7 @@ import Auth from "../Auth/Auth";
 import { isAuthenticated, setCookie } from "../../cookies";
 import { getStatus } from "../../api";
 import React from "react";
+import Message from "../Message/Message";
 
 export default function () {
   // order important, header must be after SignedRoutes (token check)
@@ -43,11 +44,13 @@ function SignedRoutes() {
     getStatus().then(s => setStatus(s.data))
     return null
   }
+
   if (isAuthenticated()) {
     return (
       <Routes>
         <Route path="/" element={<Feed />} />
-        <Route path="/:username" element={<Feed />} />
+        <Route path="/user/:username" element={<Feed />} />
+        <Route path="/messages" element={<Message />} />
       </Routes>
     );
   }
