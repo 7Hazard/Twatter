@@ -1,10 +1,21 @@
+import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { getFeed, getPost as getPosts } from "../../api";
+import { fetchUserPosts, getFeed, getPost as getPosts, Post } from "../../api";
 import "./Feed.scoped.scss";
 
 export default function () {
+
+  const [posts, setPosts] = React.useState<Post>()
+
   const { username } = useParams();
-  var data = username ? getPosts(username) : getFeed();
+  let data = username ? getUserPosts(username) : getFeed();
+
+  if(username){
+    fetchUserPosts(username)
+    .then(v => {
+      setPosts(v.data)
+    })
+  }
   
   return (
     <div className = "posts-container">
@@ -12,7 +23,7 @@ export default function () {
         {username ? `${username}'s feed` : `Your feed`}
       </h1>
       
-      {data.map((post) => (
+      {posts.map(post => (
         // Post container
         <div className="post-container">
           {/* Header container */}
@@ -27,3 +38,7 @@ export default function () {
     </div>
   );
 }
+function getUserPosts(username: string) {
+  throw new Error("Function not implemented.");
+}
+

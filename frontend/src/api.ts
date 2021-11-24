@@ -1,6 +1,16 @@
+import { getSuggestedQuery } from "@testing-library/dom"
 import { deleteToken, getToken } from "./cookies"
 
 export const api = `http://localhost:8080`
+
+export interface Post {
+    id: number
+    content: string
+    author: {
+        id: number
+        username: string
+    }
+  }
 
 export async function getStatus() {
     let response = await fetch(`${api}/user/status`, {
@@ -50,13 +60,7 @@ let fakedata = `
 ]
 `
 
-export function getFeed(): [{
-    id: number, content: string, author: {
-        id: number
-        username: string
-    }
-}]
-{
+export function getFeed(): [Post] {
     return JSON.parse(fakedata)
 }
 
@@ -75,13 +79,28 @@ let fakePosts = `
 ]
 `
 
-export function getPost(username:string): [{
-    id: number, content: string, author: {
-        id: number
-        username: string
-    }
-}]
-{
+export function getPost(username: string): [Post] {
     return JSON.parse(fakePosts);
+}
+
+export async function fetchUserPosts(username: string): Promise<{
+    status: number, 
+    data: [Post] | null
+}> {
+    let response = await fetch(`${api}/user/${username}/posts`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${getToken()}`
+        }
+    })
+
+    if (!response.ok) {
+        console.error(response);
+        return { status: response.status, data: null }
+    }
+
+    let json = await response.json()
+
+    return { status: response.status, data: json }
 }
 
