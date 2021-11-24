@@ -7,24 +7,23 @@ export default function () {
   var data = username ? getPosts(username) : getFeed();
   
   return (
-    <div className = "message-box">
-      {username ? <h1>{username}'s feed</h1> : <h1>Your feed</h1>}
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Message</th>
-          </tr>
-        </thead>
-        {data.map((users) => (
-          <tbody>
-            <tr>
-              <td><Link to={`/user/${users.author.username}`}>{users.author.username}</Link></td>
-              <td>{users.content}</td>
-            </tr>
-          </tbody>
-        ))}
-      </table>
+    <div className = "posts-container">
+      <h1>
+        {username ? `${username}'s feed` : `Your feed`}
+      </h1>
+      
+      {data.map((post) => (
+        // Post container
+        <div className="post-container">
+          {/* Header container */}
+          <div className="post-header-container">
+            <Link to={`/user/${post.author.username}`}>{post.author.username}</Link>
+            <p>&nbsp;·&nbsp;{(new Date().toLocaleString())}</p>
+          </div>
+          <p>{post.content}</p>
+        </div>
+      ))}
+
     </div>
   );
 }
