@@ -67,19 +67,6 @@ public class UserController {
         return new ResponseEntity(Post.getView(postService.getFromUser(username)), HttpStatus.OK);
     }
 
-    static @Data class CreatePost { private String content; }
-    /**
-     * username path variable is disregarded
-     * @param body
-     * @param user
-     * @return
-     */
-    @PostMapping("/{username}/posts")
-    public ResponseEntity createPost(@RequestBody CreatePost body, @RequestAttribute User user) {
-        var post = postService.create(user, body.content);
-        return new ResponseEntity(post.getView(), HttpStatus.OK);
-    }
-
     @PostMapping("/{username}/followers")
     public ResponseEntity unfollow(@RequestAttribute User user, @PathVariable String username) {
         var otherUser = userService.get(username);

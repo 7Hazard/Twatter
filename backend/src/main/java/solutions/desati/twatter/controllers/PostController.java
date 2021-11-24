@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import solutions.desati.twatter.models.Post;
+import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.services.AuthService;
 import solutions.desati.twatter.services.PostService;
 
@@ -32,5 +33,17 @@ public class PostController {
     @GetMapping
     public ResponseEntity getBulk(@RequestBody GetBulk body) {
         return new ResponseEntity(Post.getView(postService.getBulk(body.ids)), HttpStatus.OK);
+    }
+
+    static @Data class CreatePost { private String content; }
+    /**
+     * @param body
+     * @param user
+     * @return
+     */
+    @PostMapping
+    public ResponseEntity create(@RequestBody CreatePost body, @RequestAttribute User user) {
+        var post = postService.create(user, body.content);
+        return new ResponseEntity(post.getView(), HttpStatus.OK);
     }
 }
