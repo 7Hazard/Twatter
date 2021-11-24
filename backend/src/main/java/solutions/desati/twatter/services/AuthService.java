@@ -89,7 +89,7 @@ public class AuthService {
         }
 
         // get github user info
-        String githubId;
+        long githubId;
         {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -102,7 +102,7 @@ public class AuthService {
                     String.class
             );
             var body = new JSONObject(response.getBody());
-            githubId = body.getString("id");
+            githubId = body.getLong("id");
         }
 
         // get user through github id, if it doesnt exist then create

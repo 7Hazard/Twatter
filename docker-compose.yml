@@ -1,28 +1,33 @@
 services:
-  # frontend1:
-  #   build: ./frontend
-  #   ports:
-  #     - "3001:3000"
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+
   # frontend2:
   #   build: ./frontend
   #   ports:
   #     - "3002:3000"
   # frontend-loadbalancer:
   #   image: httpd:2.4
+
   backend:
     build: ./backend
     environment:
+      - TWATTER_GITHUB_CLIENT_SECRET=${TWATTER_GITHUB_CLIENT_SECRET}
       - TWATTER_DB_PW=${TWATTER_DB_PW}
       - TWATTER_DB_HOST=${TWATTER_DB_HOST}
     ports:
       - "8080:8080"
     links:
       - database
+
   database:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=${TWATTER_DB_PW}
     ports:
       - "5432:5432"
+
 # volumes:
 #   logvolume01: {}
