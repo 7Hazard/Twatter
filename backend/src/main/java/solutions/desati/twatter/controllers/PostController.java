@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import solutions.desati.twatter.models.Post;
-import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.services.AuthService;
 import solutions.desati.twatter.services.PostService;
 
