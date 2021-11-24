@@ -17,8 +17,7 @@ public class PostService {
     }
 
     public Optional<Post> get(Long id) {
-        var post = postRepository.findById(id);
-        return post;
+        return postRepository.findById(id);
     }
 
     public List<Post> getBulk(List<Long> ids) {
@@ -26,11 +25,8 @@ public class PostService {
     }
 
     public Post create(User author, String content) {
-        var post = new Post();
-        post.author = author;
-        post.content = content;
-        postRepository.save(post);
-        return post;
+        var post = new Post(author, content);
+        return postRepository.save(post);
     }
 
     public List<Post> getFromUser(Long id) {
