@@ -23,8 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
                 "/user/feed",
                 "/user/*/follow",
                 "/user/*/unfollow",
-                "/user/*/posts", // TODO only auth post
-                "/user/*/messages"
+                "/user/*/messages",
+                "/post"
         );
     }
 }
