@@ -41,14 +41,14 @@ public class Post {
         private Long id;
         private User.View author;
         private String content;
-        private LocalDateTime time;
+        private String time;
     }
     public View getView() {
         return new View(
                 id,
                 author.getView(),
                 content,
-                time
+                time.toString()
         );
     }
     public static List<View> getView(List<Post> posts) {
