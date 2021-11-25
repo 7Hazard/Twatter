@@ -30,7 +30,7 @@ public class UserController {
      * Debug endpoint
      * @return
      */
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity create(@RequestParam String username){
         var token = userService.create(username);
         return new ResponseEntity(token.getId(), HttpStatus.OK);
