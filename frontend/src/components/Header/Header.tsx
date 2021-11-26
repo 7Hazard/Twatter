@@ -10,7 +10,7 @@ export default function() {
         <nav>
           <Link to="/">Feed</Link>
           <Link to="/signout">Sign Out</Link>
-          <Link to="/messages">Message</Link>
+          <Link to="/messages">Messages</Link>
         </nav>
       ) : (
         <nav />

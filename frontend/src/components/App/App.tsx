@@ -16,6 +16,7 @@ import { authorizedGet } from "../../api";
 import Message from "../Message/Message";
 import { Async } from "react-async";
 import Status from "../Status/Status";
+import { useState } from "react";
 
 export default function () {
   // order important, header must be after SignedRoutes (token check)
@@ -27,7 +28,11 @@ export default function () {
   );
 }
 
+interface StatusResponse { missing: string[] }
+
 function SignedRoutes() {
+  const [status, setStatus] = useState(false);
+
   let location = useLocation();
   let token = new URLSearchParams(location.search).get("token");
   if (token) {
@@ -38,20 +43,22 @@ function SignedRoutes() {
   }
 
   if(isAuthenticated()) return (<>
+    { status && (
+        <Routes>
+          <Route path="/" element={<Feed />} />
+          <Route path="/user/:username" element={<Feed />} />
+          <Route path="/messages" element={<Message />} />
+        </Routes>
+      )
+    }
     <Async promise={authorizedGet("status")} >
         <Async.Pending>Loading...</Async.Pending>
         <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
-        <Async.Fulfilled<{missing: string[]}>>
+        <Async.Fulfilled<StatusResponse>>
             {status => {
-                if(status.missing.length > 0)
+                if(status.missing.length > 0) {
                   return <Status status={status} />
-                else (
-                  <Routes>
-                    <Route path="/" element={<Feed />} />
-                    <Route path="/user/:username" element={<Feed />} />
-                    <Route path="/messages" element={<Message />} />
-                  </Routes>
-                )
+                } else setStatus(true)
             }}
         </Async.Fulfilled>
     </Async>

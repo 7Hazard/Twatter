@@ -27,7 +27,6 @@ export async function authorizedPost(path: string, body = {}, invalidateToken = 
             deleteToken()
             window.location.reload()
         }
-        alert(response.status)
         throw response
     }
 
