@@ -16,6 +16,7 @@ import solutions.desati.twatter.repositories.UserRepository;
 import solutions.desati.twatter.repositories.UserTokenRepository;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -76,16 +77,12 @@ public class UserControllerTests {
 
     @Test
     void feed() throws Exception {
-        var popularguy = new User();
-        popularguy.username = "popularguy";
-        popularguy = userRepository.save(popularguy);
+        var popularguy = userRepository.save(new User("popularguy2"));
 
         var post1 = postRepository.save(new Post(popularguy, "Hello there"));
         var post2 = postRepository.save(new Post(popularguy, "Hello again"));
 
-        var fan = new User();
-        fan.username = "fan";
-        fan = userRepository.save(fan);
+        var fan = userRepository.save(new User("fan3"));
         var token = userTokenRepository.save(new UserToken(fan));
 
         popularguy.getFollowers().addAll(List.of(fan));
