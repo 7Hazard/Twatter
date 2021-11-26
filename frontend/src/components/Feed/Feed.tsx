@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { fetchUserPosts, getFeed, getPost as getPosts, getStatus, Post } from "../../api";
+import { createPost, fetchUserPosts, getFeed, getPost as getPosts, getStatus, Post } from "../../api";
 import "./Feed.scoped.scss";
 import { Async, useAsync } from "react-async"
 
@@ -19,13 +19,12 @@ export default function () {
 
       <label>
         <h2>Post:</h2>
-        <input className="text-filed" type="text" name="name" />
+        <input id="postText" className="text-filed" type="text" name="text" />
       </label>
-      <input className="submit-button" type="submit" value="Submit" />
+      <input className="submit-button" type="submit" value="Add" onClick={()=>createPost((document.getElementById("postText") as HTMLInputElement).value)} />
 
       <h2>Feed:</h2>
       
-
       <Async promise={fetchUserPosts(username as string)} >
         <Async.Pending>Loading...</Async.Pending>
         <Async.Rejected>{error => `${error.message}`}</Async.Rejected>

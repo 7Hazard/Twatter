@@ -100,3 +100,16 @@ export async function fetchUserPosts(username:string): Promise<Post[]> {
     return json
 }
 
+export async function createPost(post:string){
+    let resp = await fetch(`${api}/post`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${getToken()}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({"content": post})
+    })
+
+    alert(resp.status)
+}
+
