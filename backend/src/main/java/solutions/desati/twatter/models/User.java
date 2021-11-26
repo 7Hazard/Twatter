@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,34 +23,38 @@ public class User {
     public String name;
 
     @Column(unique = true)
-    public long githubId;
+    public Long githubId;
 
     @Getter
     @OneToMany(mappedBy = "user")
-    private Set<UserToken> tokens;
+    private Set<UserToken> tokens = new HashSet<>();
 
     @Getter
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "_user_followers",
             joinColumns = @JoinColumn(name = "followed"),
             inverseJoinColumns = @JoinColumn(name = "following"))
-    private Set<User> followers;
+    private Set<User> followers = new HashSet<>();
 
     @Getter
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.REMOVE)
-    private Set<User> following;
+    private Set<User> following = new HashSet<>();
 
     @Getter
     @OneToMany(mappedBy = "author")
-    private Set<Post> posts;
+    private Set<Post> posts = new HashSet<>();
 
     @Getter
     @OneToMany(mappedBy = "from")
-    private Set<Message> sentMessages;
+    private Set<Message> sentMessages = new HashSet<>();
 
     @Getter
     @OneToMany(mappedBy = "to")
-    private Set<Message> recievedMessages;
+    private Set<Message> recievedMessages = new HashSet<>();
+
+    public User(String username) {
+        this.username = username;
+    }
 
     @Override
     public boolean equals(Object o) {
