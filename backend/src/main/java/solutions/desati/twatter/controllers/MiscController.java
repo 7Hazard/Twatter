@@ -10,8 +10,6 @@ import solutions.desati.twatter.models.Post;
 import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.services.UserService;
 
-import javax.websocket.server.PathParam;
-
 @RestController
 @RequestMapping("/")
 public class MiscController {
@@ -42,8 +40,7 @@ public class MiscController {
         return new ResponseEntity(json.toString(), HttpStatus.OK);
     }
 
-    public static @Data
-    class Details { private String username, name; }
+    public static @Data class Details { private String username, name; }
     @PostMapping("/details")
     public ResponseEntity details(@RequestAttribute User user, @RequestBody Details body) {
         userService.completeDetails(user, body.username, body.name);
