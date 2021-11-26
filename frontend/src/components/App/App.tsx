@@ -27,7 +27,7 @@ export default function () {
 }
 
 function SignedRoutes() {
-  const [status, setStatus] = React.useState()
+  const [status, setStatus] = React.useState<any>()
 
   // check if assigned new token, this can perhaps be done in a better way
   let location = useLocation();

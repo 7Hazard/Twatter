@@ -1,20 +1,25 @@
 import React from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { fetchUserPosts, getFeed, getPost as getPosts, Post } from "../../api";
 import "./Feed.scoped.scss";
+import { useAsync } from "react-async"
 
+let fetched = false
 export default function () {
-
-  const [posts, setPosts] = React.useState<Post>()
+  const [posts, setPosts] = React.useState<Post[]>([])
 
   const { username } = useParams();
-  let data = username ? getUserPosts(username) : getFeed();
 
-  if(username){
-    fetchUserPosts(username)
-    .then(v => {
-      setPosts(v.data)
-    })
+  const { data, error, isPending } = useAsync({ promiseFn: fetchUserPosts, username: username })
+  // if(username){
+  //   fetchUserPosts(username)
+  //   .then(v => {
+  //     setPosts(v.data)
+  //   })
+  //   .catch(e => {
+  //     alert(e);
+  //   })
   }
   
   return (
@@ -22,8 +27,15 @@ export default function () {
       <h1>
         {username ? `${username}'s feed` : `Your feed`}
       </h1>
-      
-      {posts.map(post => (
+
+      <label>
+          <h2>Post:</h2>
+          <input className="text-filed" type="text" name="name" />
+      </label>
+        <input className="submit-button" type="submit" value="Submit" />
+
+      <h2>Feed:</h2>
+      {(posts).map((post) => (
         // Post container
         <div className="post-container">
           {/* Header container */}
@@ -38,7 +50,3 @@ export default function () {
     </div>
   );
 }
-function getUserPosts(username: string) {
-  throw new Error("Function not implemented.");
-}
-

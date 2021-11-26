@@ -1,5 +1,6 @@
 import { getSuggestedQuery } from "@testing-library/dom"
 import { deleteToken, getToken } from "./cookies"
+import { useAsync } from "react-async"
 
 export const api = `http://localhost:8080`
 
@@ -83,9 +84,9 @@ export function getPost(username: string): [Post] {
     return JSON.parse(fakePosts);
 }
 
-export async function fetchUserPosts(username: string): Promise<{
+export async function fetchUserPosts({username}:{username:string}): Promise<{
     status: number, 
-    data: [Post] | null
+    data: [Post]
 }> {
     let response = await fetch(`${api}/user/${username}/posts`, {
         method: "GET",
@@ -95,10 +96,9 @@ export async function fetchUserPosts(username: string): Promise<{
     })
 
     if (!response.ok) {
-        console.error(response);
-        return { status: response.status, data: null }
+        throw Error(response.statusText)
     }
-
+    
     let json = await response.json()
 
     return { status: response.status, data: json }
