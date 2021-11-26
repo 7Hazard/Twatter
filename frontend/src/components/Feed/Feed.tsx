@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Async, useAsync } from "react-async"
-import { fetchUserPosts, getFeed, getPost as getPosts, Post } from "../../api";
+import { createPost, fetchUserPosts, getFeed, getPost as getPosts, Post } from "../../api";
 import "./Feed.scoped.css";
 
 let fetched = false
