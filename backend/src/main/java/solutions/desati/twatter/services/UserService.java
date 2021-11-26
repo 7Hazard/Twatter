@@ -24,9 +24,9 @@ public class UserService {
         this.userTokenRepository = userTokenRepository;
     }
 
-    public void completeDetails(User user, UserController.Details details) {
-        user.username = details.getUsername();
-        user.name = details.getName();
+    public void completeDetails(User user, String username, String name) {
+        user.username = username;
+        user.name = name;
         userRepository.save(user);
     }
 
@@ -61,5 +61,14 @@ public class UserService {
         var token = new UserToken(user);
         token = userTokenRepository.save(token);
         return token;
+    }
+
+    /**
+     * Find all users
+     * @param name
+     * @return
+     */
+    public List<User> search(String name) {
+        return userRepository.findByUsernameContainsIgnoreCaseOrNameContainsIgnoreCase(name, name);
     }
 }

@@ -1,16 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { createPost, fetchUserPosts, getFeed, getPost as getPosts, getStatus, Post } from "../../api";
-import "./Feed.scoped.scss";
 import { Async, useAsync } from "react-async"
+import { fetchUserPosts, getFeed, getPost as getPosts, Post } from "../../api";
+import "./Feed.scoped.css";
 
 let fetched = false
 export default function () {
   const [posts, setPosts] = React.useState<Post[]>([])
 
   const { username } = useParams();
-
+  
   return (
     <div className="posts-container">
       <h1>
@@ -24,7 +24,7 @@ export default function () {
       <input className="submit-button" type="submit" value="Add" onClick={()=>createPost((document.getElementById("postText") as HTMLInputElement).value)} />
 
       <h2>Feed:</h2>
-      
+
       <Async promise={fetchUserPosts(username as string)} >
         <Async.Pending>Loading...</Async.Pending>
         <Async.Rejected>{error => `${error.message}`}</Async.Rejected>

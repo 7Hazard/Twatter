@@ -14,7 +14,7 @@ export interface Post {
   }
 
 export async function getStatus() {
-    let response = await fetch(`${api}/user/status`, {
+    let response = await fetch(`${api}/status`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${getToken()}`

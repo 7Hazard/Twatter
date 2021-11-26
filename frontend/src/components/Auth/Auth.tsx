@@ -1,4 +1,4 @@
-import "./Auth.scoped.scss";
+import "./Auth.scoped.css";
 
 export default function() {
   //   let [error, setError] = React.useState("");

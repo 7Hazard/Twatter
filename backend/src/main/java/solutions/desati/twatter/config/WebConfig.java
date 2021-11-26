@@ -18,9 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor).addPathPatterns(
-                "/user/status",
-                "/user/details",
-                "/user/feed",
+                "/status",
+                "/details",
+                "/feed",
                 "/user/*/follow",
                 "/user/*/unfollow",
                 "/user/*/messages",

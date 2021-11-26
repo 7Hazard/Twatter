@@ -38,9 +38,9 @@ a.button-link img {
 }
 
 a.button-link {
-    // -webkit-appearance: button;
-    // -moz-appearance: button;
-    // appearance: button;
+    /* -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button; */
 
     width: 100%;
     height: 2.7em;
