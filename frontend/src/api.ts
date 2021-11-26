@@ -84,10 +84,7 @@ export function getPost(username: string): [Post] {
     return JSON.parse(fakePosts);
 }
 
-export async function fetchUserPosts({username}:{username:string}): Promise<{
-    status: number, 
-    data: [Post]
-}> {
+export async function fetchUserPosts(username:string): Promise<Post[]> {
     let response = await fetch(`${api}/user/${username}/posts`, {
         method: "GET",
         headers: {
@@ -100,7 +97,6 @@ export async function fetchUserPosts({username}:{username:string}): Promise<{
     }
     
     let json = await response.json()
-
-    return { status: response.status, data: json }
+    return json
 }
 
