@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { getCookie, getToken, isAuthenticated } from "../../cookies";
-import "./Message.scoped.scss";
+import "./Message.scoped.css";
 
 export default function () {
   return (

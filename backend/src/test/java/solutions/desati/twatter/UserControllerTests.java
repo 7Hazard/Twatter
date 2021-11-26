@@ -97,4 +97,18 @@ public class UserControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expected));
     }
+
+    @Test
+    void search() throws Exception {
+        var john = userRepository.save(new User("John"));
+        var doe = userRepository.save(new User("Doe"));
+
+        var expected = objectMapper.writeValueAsString(List.of(
+                john.getView(),
+                doe.getView()
+        ));
+        mvc.perform(get("/search/users/o"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expected));
+    }
 }

@@ -38,32 +38,6 @@ public class UserController {
         return new ResponseEntity(json.toString(), HttpStatus.OK);
     }
 
-    @GetMapping("/status")
-    public ResponseEntity status(@RequestAttribute User user){
-        var json = new JSONObject();
-
-        { // Missing fields
-            var missing = new JSONArray();
-            if(user.username == null) missing.put("username");
-            if(user.name == null) missing.put("name");
-            json.put("missing", missing);
-        }
-
-        return new ResponseEntity(json.toString(), HttpStatus.OK);
-    }
-
-    public static @Data class Details { private String username, name; }
-    @PostMapping("/details")
-    public ResponseEntity details(@RequestAttribute User user, @RequestBody Details body) {
-        userService.completeDetails(user, body);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @GetMapping("/feed")
-    public ResponseEntity feed(@RequestAttribute User user) {
-        return new ResponseEntity(Post.getView(userService.getFeed(user)), HttpStatus.OK);
-    }
-
     @GetMapping("/{username}/posts")
     public ResponseEntity posts(@PathVariable String username) {
         return new ResponseEntity(Post.getView(postService.getFromUser(username)), HttpStatus.OK);
