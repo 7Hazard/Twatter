@@ -33,7 +33,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity create(@RequestParam String username){
         var token = userService.create(username);
-        return new ResponseEntity(token.getId(), HttpStatus.OK);
+        var json = new JSONObject();
+        json.put("token", token.getId());
+        return new ResponseEntity(json.toString(), HttpStatus.OK);
     }
 
     @GetMapping("/status")
