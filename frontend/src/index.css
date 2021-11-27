@@ -10,9 +10,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  margin-top: var(--header-height);
-  margin-left: 1em;
-  margin-right: 1em;
+  padding-top: var(--header-height);
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
 
   background-color: rgb(0, 104, 173);
 
@@ -27,4 +28,16 @@ code {
 
 h1 {
   font-weight: normal;
+}
+
+html {
+  height: 100%
+}
+
+body {
+  height: 90%;
+}
+
+#app {
+  height: 100%;
 }

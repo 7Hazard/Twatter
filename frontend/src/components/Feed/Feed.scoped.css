@@ -1,33 +1,21 @@
 .posts-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 1rem;
+    height: 95%;
+
+    padding: 1em;
 }
 
 .posts-container h1 {
     margin: 0;
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
+.posts-scroll {
+    /* display: flex;
+    flex-direction: column; */
+    height: 80%;
 
-th,
-td {
-    border: 1px solid #ffffff;
-    text-align: left;
-    padding: 8px;
-    font-size: 32px;
-}
-
-th {
-    background-color: rgb(117, 201, 250);
-}
-
-td {
-    background-color: rgb(205, 235, 253);
+    border: solid;
+    border-color: rgb(43, 43, 43);
+    overflow-y: scroll;
 }
 
 .post-container p {

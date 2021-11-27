@@ -22,8 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                 "/details",
                 "/feed",
                 "/self",
-                "/user/*/follow",
-                "/user/*/unfollow",
+                "/user/*/followers",
                 "/user/*/message",
                 "/post",
                 "/conversations/**"

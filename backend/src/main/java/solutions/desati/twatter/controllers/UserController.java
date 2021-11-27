@@ -41,18 +41,14 @@ public class UserController {
         return new ResponseEntity(json.toString(), HttpStatus.OK);
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity get(@PathVariable String username) {
+        return new ResponseEntity(userService.get(username).getView(), HttpStatus.OK);
+    }
+
     @GetMapping("/{username}/posts")
     public ResponseEntity posts(@PathVariable String username) {
         return new ResponseEntity(Post.getView(postService.getFromUser(username)), HttpStatus.OK);
-    }
-
-    @PostMapping("/{username}/followers")
-    public ResponseEntity unfollow(@RequestAttribute User user, @PathVariable String username) {
-        var otherUser = userService.get(username);
-        if(otherUser == null)
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        userService.toggleFollow(user, otherUser);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/{username}/followers")
@@ -62,6 +58,15 @@ public class UserController {
         var followers = user.getFollowers();
         var views = User.getView(followers);
         return new ResponseEntity(views, HttpStatus.OK);
+    }
+
+    @PostMapping("/{username}/followers")
+    public ResponseEntity toggleFollow(@RequestAttribute User user, @PathVariable String username) {
+        var otherUser = userService.get(username);
+        if(otherUser == null)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        userService.toggleFollow(user, otherUser);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     static @Data class SendMessage { private String content; }

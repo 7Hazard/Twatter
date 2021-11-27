@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Async } from "react-async";
 import { Link } from "react-router-dom";
-import { authorizedGet, searchUser } from "../../api";
-import { getCookie, getToken, isAuthenticated } from "../../cookies";
+import { authorizedGet } from "../../api";
+import { isAuthenticated } from "../../cookies";
 import { User } from "../../interfaces/User";
 import "./Header.scoped.css";
 
