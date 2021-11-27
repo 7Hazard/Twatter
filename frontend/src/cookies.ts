@@ -45,5 +45,5 @@ export function isAuthenticated() {
 }
 
 export function getSelf(): User {
-  return JSON.parse(getCookie("self"))
+  return JSON.parse(getCookie("self") || '')
 }

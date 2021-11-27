@@ -8,7 +8,7 @@ import { Message } from "../../interfaces/Message";
 import "./Message.scoped.css";
 
 export default function () {
-    const [convo, setConvo] = useState<Conversation>(undefined);
+    const [convo, setConvo] = useState<Conversation>(undefined!);
     const [toggle, setToggle] = useState(false)
 
     return (<>
