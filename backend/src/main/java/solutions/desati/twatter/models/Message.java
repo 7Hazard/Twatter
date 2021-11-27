@@ -3,10 +3,11 @@ package solutions.desati.twatter.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@ToString
+@NoArgsConstructor
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,37 +15,43 @@ public class Message {
     private Long id;
 
     @Getter
+    @ManyToOne
+    Conversation conversation;
+
+    @Getter
+    @ManyToOne
+    User from;
+
+    @Getter
     @Setter
     private String content;
 
     @Getter
-    @ManyToOne
-    private User from;
+    private LocalDateTime time;
 
-    @Getter
-    @ManyToOne
-    private User to;
-
-    public Message(User from, User to, String content) {
+    public Message(Conversation conversation, User from, String content) {
+        this.conversation = conversation;
         this.from = from;
-        this.to = to;
         this.content = content;
+        this.time = LocalDateTime.now();
     }
 
     @ToString
     @AllArgsConstructor
     public static @Data class View {
         private Long id;
-        private String content;
+        private Long conversationId;
         private User.View from;
-        private User.View to;
+        private String content;
+        private String time;
     }
     public View getView() {
         return new View(
                 id,
-                content,
+                conversation.getId(),
                 from.getView(),
-                to.getView()
+                content,
+                time.toString()
         );
     }
     public static List<View> getView(List<Message> messages) {

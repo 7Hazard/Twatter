@@ -26,13 +26,16 @@ public class UserController {
         this.messageService = messageService;
     }
 
+    @Data
+    static class Create{ private String username, password; }
     /**
      * Debug endpoint
      * @return
      */
     @PostMapping
-    public ResponseEntity create(@RequestParam String username){
-        var token = userService.create(username);
+    public ResponseEntity create(@RequestBody Create body){
+        if(userService.get(body.username) != null) return new ResponseEntity(HttpStatus.CONFLICT);
+        var token = userService.create(body.username, body.password);
         var json = new JSONObject();
         json.put("token", token.getId());
         return new ResponseEntity(json.toString(), HttpStatus.OK);
@@ -61,32 +64,18 @@ public class UserController {
         return new ResponseEntity(views, HttpStatus.OK);
     }
 
-    /**
-     * username is 'to'
-     * authed user is 'from'
-     * @param from
-     * @return
-     */
-    @GetMapping("/{username}/messages")
-    public ResponseEntity getMessages(@RequestAttribute User from, @PathVariable String username) {
-        var to = userService.get(username);
-        if(to == null) return new ResponseEntity("invalid username", HttpStatus.NOT_FOUND);
-        return new ResponseEntity(Message.getView(messageService.get(from, to)), HttpStatus.OK);
-    }
-
     static @Data class SendMessage { private String content; }
     /**
-     * username is 'to'
-     * authed user is 'from'
-     * @param body
-     * @param from
+     * Finds or creates a conversation between user and other user
+     * @param user
      * @param username
+     * @param body
      * @return
      */
-    @PostMapping("/{username}/messages")
-    public ResponseEntity sendMessage(@RequestBody SendMessage body, @RequestAttribute User from, @PathVariable String username) {
+    @PostMapping("/{username}/message")
+    public ResponseEntity sendMessage(@RequestAttribute User user, @PathVariable String username, @RequestBody SendMessage body) {
         var to = userService.get(username);
         if(to == null) return new ResponseEntity("invalid recipient", HttpStatus.NOT_FOUND);
-        return new ResponseEntity(messageService.send(from, to, body.content).getView(), HttpStatus.OK);
+        return new ResponseEntity(messageService.send(user, to, body.content).getView(), HttpStatus.OK);
     }
 }

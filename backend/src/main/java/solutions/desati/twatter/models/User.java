@@ -20,7 +20,7 @@ public class User {
     @Column(unique = true)
     public String username;
 
-    public String name;
+    public String password;
 
     @Column(unique = true)
     public Long githubId;
@@ -44,13 +44,8 @@ public class User {
     @OneToMany(mappedBy = "author")
     private Set<Post> posts = new HashSet<>();
 
-    @Getter
-    @OneToMany(mappedBy = "from")
-    private Set<Message> sentMessages = new HashSet<>();
-
-    @Getter
-    @OneToMany(mappedBy = "to")
-    private Set<Message> recievedMessages = new HashSet<>();
+    @ManyToMany(mappedBy = "participants")
+    private List<Conversation> conversations;
 
     public User(String username) {
         this.username = username;
@@ -76,14 +71,12 @@ public class User {
     public static @Data class View {
         private Long id;
         private String username;
-        private String name;
         private Long githubId;
     }
     public View getView() {
         return new View(
                 id,
                 username,
-                name,
                 githubId
         );
     }

@@ -1,8 +1,96 @@
-.submit-button {
-    width: 20%;
-    display: block;
+
+.messages {
+    display: flex;
+    width: 100%;
+    height: calc(99.3vh - var(--header-height));
 }
 
-.text-filed {
-    width: 50%;
+.messages h1 {
+    margin-left: 0.3em;
+}
+
+.users-list {
+    width: 40%;
+    height: 100%;
+
+    border: solid;
+}
+
+.message-view {
+    width: 60%;
+    height: 100%;
+
+    border: solid;
+    border-left: none;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.message-view-content {
+    height: 90%;
+    max-height: 90%;
+    padding: 0.5em 1em;
+
+    border-top: solid;
+
+    overflow-y: scroll;
+
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.message-view-content div {
+    width: 100%;
+
+    display: flex;
+}
+
+.message-view-content div p {
+    background-color: rgba(9, 9, 9, 0.076);
+
+    max-width: 70%;
+
+    padding: 0.5em 0.6em;
+    border: solid;
+    margin: 0.4em 0;
+}
+
+.message-sent {
+    justify-content: right;
+}
+
+.message-sent p {
+    border-radius: 20px;
+    border-bottom-right-radius: 0;
+}
+
+.message-received p {
+    border-radius: 20px;
+    border-bottom-left-radius: 0;
+}
+
+.user {
+    padding: 0 0.5em;
+    border-top: solid;
+    border-bottom: solid;
+}
+
+.user:hover {
+    background-color: rgba(0, 0, 0, 0.152);
+    cursor: pointer;
+}
+
+.message-send-container {
+    width: 100%;
+    height: 10%;
+
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+}
+
+.message-send-button {
+    width: 5em;
 }

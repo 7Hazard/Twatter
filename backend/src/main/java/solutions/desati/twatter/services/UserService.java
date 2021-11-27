@@ -1,7 +1,6 @@
 package solutions.desati.twatter.services;
 
 import org.springframework.stereotype.Service;
-import solutions.desati.twatter.controllers.UserController;
 import solutions.desati.twatter.models.Post;
 import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.models.UserToken;
@@ -24,9 +23,8 @@ public class UserService {
         this.userTokenRepository = userTokenRepository;
     }
 
-    public void completeDetails(User user, String username, String name) {
+    public void completeDetails(User user, String username) {
         user.username = username;
-        user.name = name;
         userRepository.save(user);
     }
 
@@ -54,9 +52,10 @@ public class UserService {
      * Create user and return token
      * @return
      */
-    public UserToken create(String username) {
+    public UserToken create(String username, String password) {
         var user = new User();
         user.username = username;
+        user.password = password;
         user = userRepository.save(user);
         var token = new UserToken(user);
         token = userTokenRepository.save(token);
@@ -69,6 +68,19 @@ public class UserService {
      * @return
      */
     public List<User> search(String name) {
-        return userRepository.findByUsernameContainsIgnoreCaseOrNameContainsIgnoreCase(name, name);
+        return userRepository.findByUsernameContainsIgnoreCase(name);
+    }
+
+    /**
+     * Primarly for debugging
+     * Creates token if username and password matches
+     * @param username
+     * @param password
+     * @return
+     */
+    public UserToken login(String username, String password) {
+        var user = userRepository.findByUsernameAndPassword(username, password);
+        if(user == null) return null;
+        return userTokenRepository.save(new UserToken(user));
     }
 }

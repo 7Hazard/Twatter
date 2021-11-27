@@ -1,3 +1,5 @@
+import { User } from "./interfaces/User";
+
 export function setCookie(key: string, value: string, daysTillExpiration: number) {
   const d = new Date();
   d.setTime(d.getTime() + daysTillExpiration * 24 * 60 * 60 * 1000);
@@ -40,4 +42,8 @@ export function deleteToken() {
 
 export function isAuthenticated() {
     return getToken() != null
+}
+
+export function getSelf(): User {
+  return JSON.parse(getCookie("self"))
 }

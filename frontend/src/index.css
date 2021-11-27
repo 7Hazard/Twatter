@@ -12,8 +12,12 @@ body {
 
   margin-top: var(--header-height);
   margin-left: 1em;
+  margin-right: 1em;
 
   background-color: rgb(0, 104, 173);
+
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 code {
