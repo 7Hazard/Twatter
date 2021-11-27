@@ -113,3 +113,19 @@ export async function createPost(post:string){
     alert(resp.status)
 }
 
+export async function searchUser(username:string){
+    alert(username)
+    let response = await fetch(`${api}/search/user/${username}`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${getToken()}`
+        }
+    })
+
+    if (!response.ok) {
+        throw Error(response.statusText)
+    }
+    
+    let json = await response.json()
+    return json
+}
