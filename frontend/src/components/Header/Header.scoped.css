@@ -44,3 +44,18 @@ nav a:hover {
 .search {
     width: 15em;
 }
+
+.search-results {
+    position: fixed;
+    top: var(--header-height);
+    background-color: white;
+
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.search-results a {
+    margin: 0.2em 0;
+}
