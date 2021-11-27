@@ -23,13 +23,14 @@ public class MessageService {
     }
 
     public Message send(User from, User to, String content) {
-        throw new UnsupportedOperationException();
-//        var conv = conversationRepository.findByParticipantsMatches(List.of(from, to));
-//        if(conv == null) conv = conversationRepository.save(new Conversation(from, to));
-//        var msg = messageRepository.save(new Message(conv, from, content));
-//        conv.setLastActivity(msg.getTime());
-//        conversationRepository.save(conv);
-//        return msg;
+//        throw new UnsupportedOperationException();
+        var list = List.of(from, to);
+        var conv = conversationRepository.findByParticipants(list, list.size());
+        if(conv == null) conv = conversationRepository.save(new Conversation(from, to));
+        var msg = messageRepository.save(new Message(conv, from, content));
+        conv.setLastActivity(msg.getTime());
+        conversationRepository.save(conv);
+        return msg;
     }
 
     public Message send(Conversation conv, User from, String content) {

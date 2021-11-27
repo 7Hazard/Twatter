@@ -11,11 +11,13 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-    List<Conversation> findAllByParticipantsContainingOrderByLastActivity(User participant);
+    List<Conversation> findAllByParticipantsContainingOrderByLastActivityDesc(User participant);
     Conversation findAllByIdAndParticipantsContaining(Long id, User participants);
 
-//    @Query(value = "SELECT u FROM Conversation u LEFT JOIN u.participants sk WHERE sk IN :skillList"
-//            + " GROUP BY u HAVING COUNT(sk) = :skillListSize")
-//    List<User> findBySkills(@Param("skillList") List<User> skills,
-//                            @Param("skillListSize") long skillListSize);
+    @Query(value = "SELECT u FROM Conversation u LEFT JOIN u.participants sk WHERE sk IN :users"
+            + " GROUP BY u HAVING COUNT(sk) = :usersSize")
+    Conversation findByParticipants(@Param("users") List<User> users,
+                            @Param("usersSize") long usersSize);
+
+
 }

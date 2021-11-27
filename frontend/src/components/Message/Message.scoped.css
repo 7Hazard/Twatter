@@ -6,13 +6,23 @@
 }
 
 .messages h1 {
-    margin-left: 0.3em;
+    margin: 0;
 }
 
-.users-list {
+.messages h3 {
+    margin: 0;
+}
+
+.messages-title-container {
+    padding: 1em 1em;
+    border-bottom: solid;
+}
+
+.users-list-container {
     width: 40%;
     height: 100%;
 
+    overflow-y: scroll;
     border: solid;
 }
 
@@ -31,8 +41,6 @@
     height: 90%;
     max-height: 90%;
     padding: 0.5em 1em;
-
-    border-top: solid;
 
     overflow-y: scroll;
 
@@ -71,8 +79,7 @@
 }
 
 .user {
-    padding: 0 0.5em;
-    border-top: solid;
+    padding: 1em 0.8em;
     border-bottom: solid;
 }
 
