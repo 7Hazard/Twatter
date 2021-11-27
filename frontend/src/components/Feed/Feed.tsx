@@ -1,29 +1,40 @@
-import React from "react";
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Async, useAsync } from "react-async"
-import { createPost, fetchUserPosts, getFeed, getPost as getPosts, Post } from "../../api";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Async } from "react-async"
+import { authorizedPost, createPost, fetchUserPosts } from "../../api";
 import "./Feed.scoped.css";
+import { Post } from "../../interfaces/Post";
 
 let fetched = false
 export default function () {
-  const [posts, setPosts] = React.useState<Post[]>([])
-
   const { username } = useParams();
-  
+  let navigate = useNavigate()
+
   return (
     <div className="posts-container">
-      <h1>
-        {username ? `${username}'s feed` : `Your feed`}
-      </h1>
+      <h1>{username ? `${username}'s feed` : `Your feed`}</h1>
 
-      <label>
-        <h2>Post:</h2>
-        <input id="postText" className="text-filed" type="text" name="text" />
-      </label>
-      <input className="submit-button" type="submit" value="Add" onClick={()=>createPost((document.getElementById("postText") as HTMLInputElement).value)} />
+      {username && (
+        <form className="send-message" onSubmit={e => {
+          e.preventDefault()
+          authorizedPost(`user/${username}/message`, {
+            content: e.currentTarget["message"].value
+          }, true)
+            .then(v => {
+              navigate("/messages")
+            })
+            .catch(r => {
+              alert("Could not send message")
+            })
+        }}>
+          <input type="text" placeholder="Message" name="message" />
+          <input type="submit" value="Send" />
+        </form>
+      )}
 
-      <h2>Feed:</h2>
+      {!username && (<>
+        <input id="postText" className="text-filed" type="text" name="text" placeholder="What are you doing?" />
+        <input className="submit-button" type="submit" value="Post" onClick={() => createPost((document.getElementById("postText") as HTMLInputElement).value)} />
+      </>)}
 
       <Async promise={fetchUserPosts(username as string)} >
         <Async.Pending>Loading...</Async.Pending>
@@ -35,7 +46,7 @@ export default function () {
               {/* Header container */}
               <div className="post-header-container">
                 <Link to={`/user/${post.author.username}`}>{post.author.username}</Link>
-                <p>&nbsp;·&nbsp;{(new Date().toLocaleString())}</p>
+                <p>&nbsp;·&nbsp;{(new Date(post.time).toLocaleString())}</p>
               </div>
               <p>{post.content}</p>
             </div>
