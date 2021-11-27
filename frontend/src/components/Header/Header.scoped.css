@@ -1,15 +1,12 @@
 header {
     height: var(--header-height);
     width: 100%;
-
     position: fixed;
     top: 0;
     left: 0;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     background-color: rgb(0, 73, 122);
 }
 
@@ -23,4 +20,15 @@ nav a {
 
 .logo {
     height: 100%;
+}
+
+.navbar {
+    position: relative;
+    top: 30px;
+}
+
+.search-element {
+    position: relative;
+    left: -300px;
+    bottom: 10px;
 }
