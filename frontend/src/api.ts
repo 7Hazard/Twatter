@@ -1,39 +1,64 @@
-import { getSuggestedQuery } from "@testing-library/dom"
 import { deleteToken, getToken } from "./cookies"
-import { useAsync } from "react-async"
 
 export const api = `http://localhost:8080`
 
 export interface Post {
-    id: number
+id: number
     content: string
     author: {
         id: number
         username: string
     }
-  }
+}
 
-export async function getStatus() {
-    let response = await fetch(`${api}/status`, {
-        method: "GET",
+export async function authorizedPost(path: string, body = {}, invalidateToken = false) {
+    let response = await fetch(`${api}/${path}`, {
+        method: "post",
         headers: {
-            "Authorization": `Bearer ${getToken()}`
-        }
+            "Authorization": `Bearer ${getToken()}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
     })
 
     if (!response.ok) {
         // Invalid credentials
-        if (response.status == 401) {
+        if (response.status == 401 && invalidateToken) {
             deleteToken()
             window.location.reload()
         }
-        console.error(response);
-        return { status: response.status, data: null }
+        throw response
     }
 
-    let json = await response.json()
+    try {
+        return await response.json()
+    } catch (error) {
+        return {}
+    }
+}
 
-    return { status: response.status, data: json }
+export async function authorizedGet(path: string, clearCookies = false) {
+    let response = await fetch(`${api}/${path}`, {
+        method: "get",
+        headers: {
+            "Authorization": `Bearer ${getToken()}`,
+        },
+    })
+
+    if (!response.ok) {
+        // Invalid credentials
+        if (response.status == 401 && clearCookies) {
+            deleteToken()
+            window.location.reload()
+        }
+        throw response
+    }
+
+    try {
+        return await response.json()
+    } catch (error) {
+        return {}
+    }
 }
 
 let fakedata = `
