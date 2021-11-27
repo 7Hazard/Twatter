@@ -34,6 +34,11 @@ td {
     margin: 0;
 }
 
+.posts-container form {
+    margin: 0;
+    padding: 0;
+}
+
 .post-container {
     padding: 1em 1em;
 
@@ -45,4 +50,8 @@ td {
 .post-header-container {
     display: flex;
     margin-bottom: 0.5em;
+}
+
+.post-header-container a {
+    color: rgb(0, 0, 0);
 }

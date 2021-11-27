@@ -13,6 +13,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthor(User author);
     List<Post> findByAuthor_Id(long id);
     List<Post> findByAuthor_Username(String username);
+    List<Post> findByAuthor_FollowersIsInOrAuthorIs(Set<User> followers, User self);
     List<Post> findByAuthor_FollowersIsIn(Set<User> followers);
+
+    List<Post> findByAuthor_FollowersIsInOrAuthorOrderByTimeAsc(Collection<User> followers, User author);
 
 }

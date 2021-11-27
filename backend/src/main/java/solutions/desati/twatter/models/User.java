@@ -33,7 +33,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "_user_followers",
             joinColumns = @JoinColumn(name = "followed"),
-            inverseJoinColumns = @JoinColumn(name = "following"))
+            inverseJoinColumns = @JoinColumn(name = "follower"))
     private Set<User> followers = new HashSet<>();
 
     @Getter

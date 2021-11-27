@@ -1,19 +1,22 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Async } from "react-async"
-import { authorizedPost, createPost, fetchUserPosts } from "../../api";
+import { authorizedGet, authorizedPost, createPost, fetchUserPosts } from "../../api";
 import "./Feed.scoped.css";
 import { Post } from "../../interfaces/Post";
+import { getSelf } from "../../cookies";
 
 let fetched = false
 export default function () {
   const { username } = useParams();
   let navigate = useNavigate()
 
+  let self = getSelf()
+
   return (
     <div className="posts-container">
-      <h1>{username ? `${username}'s feed` : `Your feed`}</h1>
+      <h1>{username ? `${username}` : `Your feed`}</h1>
 
-      {username && (
+      {username && username != self.username && (
         <form className="send-message" onSubmit={e => {
           e.preventDefault()
           authorizedPost(`user/${username}/message`, {
@@ -32,12 +35,12 @@ export default function () {
       )}
 
       {!username && (<>
-        <input id="postText" className="text-filed" type="text" name="text" placeholder="What are you doing?" />
+        <input id="postText" className="text-filed" type="text" name="text" placeholder="What are you doing now?" />
         <input className="submit-button" type="submit" value="Post" onClick={() => createPost((document.getElementById("postText") as HTMLInputElement).value)} />
       </>)}
 
-      <Async promise={fetchUserPosts(username as string)} >
-        <Async.Pending>Loading...</Async.Pending>
+      <Async promise={username ? fetchUserPosts(username as string) : authorizedGet("feed", true)} >
+        <Async.Pending></Async.Pending>
         <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
         <Async.Fulfilled>
           {(posts: Post[]) => posts.map(post => (

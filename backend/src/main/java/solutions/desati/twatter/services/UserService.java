@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public List<Post> getFeed(User user) {
-        return postRepository.findByAuthor_FollowersIsIn(Set.of(user));
+        return postRepository.findByAuthor_FollowersIsInOrAuthorOrderByTimeAsc(Set.of(user), user);
     }
 
     public void toggleFollow(User follower, User following) {
