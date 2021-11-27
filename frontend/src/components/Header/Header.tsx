@@ -7,19 +7,17 @@ export default function() {
   return (
     <header>
       <Link to="/"><img className="logo" src="/logo.gif" alt="Twatter Logo" /></Link>
-      {isAuthenticated() ? (
+      
+      {isAuthenticated() ? (<>
+        <div className="search">
+            <input type="text" placeholder="Search" id="SearchText"></input>
+        </div>
         <nav>
-          <div className="navbar">
           <Link to="/">Feed</Link>
+          <Link to="/messages">Messages</Link>
           <Link to="/signout">Sign Out</Link>
-          <Link to="/messages">Message</Link>
-          </div>
-          <div className="search-element">
-            <input type="text" placeholder="Search.." id="SearchText"></input>
-            <button type="submit" onClick={()=>searchUser((document.getElementById("SearchText") as HTMLInputElement).value)} >Search</button>
-          </div>
         </nav>
-      ) : (
+      </>) : (
         <nav />
       )}
     </header>
