@@ -93,7 +93,7 @@ public class UserControllerTests {
                 post1.getView(),
                 post2.getView()
         ));
-        mvc.perform(get("/user/feed")
+        mvc.perform(get("/feed")
                         .header("Authorization", "Bearer " + token.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expected));

@@ -43,7 +43,9 @@ public class UserController {
 
     @GetMapping("/{username}")
     public ResponseEntity get(@PathVariable String username) {
-        return new ResponseEntity(userService.get(username).getView(), HttpStatus.OK);
+        var user = userService.get(username);
+        if(user == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(user.getView(), HttpStatus.OK);
     }
 
     @GetMapping("/{username}/posts")
