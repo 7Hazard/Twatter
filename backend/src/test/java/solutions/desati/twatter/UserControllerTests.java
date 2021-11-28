@@ -77,6 +77,22 @@ public class UserControllerTests {
     }
 
     @Test
+    void posts() throws Exception {
+        var user1 = userRepository.save(new User("postsuser"));
+
+        var post1 = postRepository.save(new Post(user1, "Hello there"));
+        var post2 = postRepository.save(new Post(user1, "Hello again"));
+
+        var expected = objectMapper.writeValueAsString(List.of(
+                post1.getView(),
+                post2.getView()
+        ));
+        mvc.perform(get("/user/"+user1.username+"/posts"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expected));
+    }
+
+    @Test
     void feed() throws Exception {
         var popularguy = userRepository.save(new User("popularguy2"));
 
