@@ -35,7 +35,7 @@ function SearchBar() {
         <div className="search">
             <input type="text" placeholder="Search" onChange={e => {
                 setSearch(e.currentTarget.value)
-            }} onFocus={e => setFocused(true)} onBlur={e => setTimeout(()=>setFocused(false), 100)} />
+            }} onFocus={e => setFocused(true)} onBlur={e => setTimeout(()=>setFocused(false), 200)} />
 
             {search.length > 0 && focused && (
                 <div className="search-results">
