@@ -78,7 +78,6 @@ export default function () {
                 }}>
                     <label className="message-upload-image">
                         <input type="file" onInput={async e => {
-                            alert("image")
                             let filebase64 = await fileToBase64(e.currentTarget.files![0])
                             try {
                                 await authorizedPost(`conversations/${selectedConvo.id}/messages`, {
