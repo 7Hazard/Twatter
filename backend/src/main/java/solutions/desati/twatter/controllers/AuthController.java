@@ -1,13 +1,14 @@
 package solutions.desati.twatter.controllers;
 
+import lombok.Data;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import solutions.desati.twatter.services.AuthService;
+import solutions.desati.twatter.services.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,9 +20,11 @@ public class AuthController {
     @Value("${twatter.auth.github.client_id}")
     private String githubClientId;
 
+    final UserService userService;
     final AuthService authService;
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -43,26 +46,15 @@ public class AuthController {
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
-//    @PostMapping("/signin")
-//    public ResponseEntity signin(String username, String password) {
-//        try {
-//            var token = userService.signin(username, password);
-//            return new ResponseEntity(token, HttpStatus.ACCEPTED);
-//        } catch (Exception e) {
-//            return new ResponseEntity(e.getMessage(), HttpStatus.FORBIDDEN);
-//        }
-//    }
-
-//    @PostMapping("/signup")
-//    public ResponseEntity signup(String username, String password)
-//    {
-//        try {
-//            userService.signup(username, password);
-//        } catch (Exception e)
-//        {
-//            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
+    @Data
+    static class Signin { private String username, password; }
+    @PostMapping("/signin")
+    public ResponseEntity signin(@RequestBody Signin body){
+        var token = userService.login(body.username, body.password);
+        if(token == null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        var json = new JSONObject();
+        json.put("token", token.getId());
+        return new ResponseEntity(json.toString(), HttpStatus.OK);
+    }
 }

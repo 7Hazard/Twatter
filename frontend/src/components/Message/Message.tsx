@@ -56,7 +56,7 @@ export default function () {
                                 <div className={`message ${msg.from.id == self.id ? "message-sent" : "message-received"}`}>
                                     <div>
                                         <div className="message-content">
-                                            {msg.image ? <img src={msg.content} /> : msg.content}
+                                            {msg.image ? <img src={msg.content} /> : <p>{msg.content}</p>}
                                         </div>
                                         {(i == 0 || msg.from.id != messages[i - 1].from.id) && (
                                             <Link to={`/user/${msg.from.username}`}>{msg.from.username}</Link>

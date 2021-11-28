@@ -1,6 +1,7 @@
 package solutions.desati.twatter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,11 +40,12 @@ public class UserControllerTests {
 
     @Test
     public void create() throws Exception {
-        mvc.perform(post("/user?username=Test&password=test123"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("token", any(Number.class)));
-
-        mvc.perform(post("/user?username=Test2&password=test123"))
+        var user1 = new JSONObject();
+        user1.put("username", "Test");
+        user1.put("password", "test123");
+        mvc.perform(post("/user")
+                        .header("Content-Type", "application/json")
+                        .content(user1.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("token", any(Number.class)));
     }

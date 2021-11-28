@@ -13,7 +13,7 @@ export default function () {
                 className="signin"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    authorizedPost("login", {
+                    authorizedPost("auth/signin", {
                         username: e.currentTarget["username"].value,
                         password: e.currentTarget["password"].value
                     })

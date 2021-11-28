@@ -22,18 +22,6 @@ public class MiscController {
         this.messageService = messageService;
     }
 
-    @Data
-    static class Login{ private String username, password; }
-    @PostMapping("/login")
-    public ResponseEntity create(@RequestBody Login body){
-        var token = userService.login(body.username, body.password);
-        if(token == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        var json = new JSONObject();
-        json.put("token", token.getId());
-        return new ResponseEntity(json.toString(), HttpStatus.OK);
-    }
-
     @GetMapping("/search/users/{name}")
     public ResponseEntity search(@PathVariable String name) {
         return new ResponseEntity(
