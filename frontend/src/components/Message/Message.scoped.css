@@ -46,58 +46,110 @@
 
     display: flex;
     flex-direction: column-reverse;
+    gap: 0.5em;
 }
 
-.message-view-content div {
-    width: 100%;
-
+.message {
     display: flex;
+    flex-direction: column;
+
+    width: 100%;
 }
 
-.message-view-content div p {
-    background-color: rgba(9, 9, 9, 0.076);
+.message > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
 
-    max-width: 70%;
+    max-width: 80%;
+}
 
-    padding: 0.5em 0.6em;
-    border: solid;
-    margin: 0.4em 0;
+.message p {
+    margin: 0;
+}
+
+.message img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.message a {
+    text-decoration: none;
+    color: rgb(39, 39, 39);
 }
 
 .message-sent {
-    justify-content: right;
+    align-items: flex-end;
 }
 
-.message-sent p {
+.message-sent > div {
+    align-items: flex-end;
+}
+
+.message-content {
+    display: table;
+    padding: 0.5em 0.6em;
+
+    border: solid;
+    border-width: 2px;
     border-radius: 20px;
+}
+
+.message-sent .message-content {
     border-bottom-right-radius: 0;
 }
 
-.message-received p {
-    border-radius: 20px;
+.message-received .message-content {
     border-bottom-left-radius: 0;
 }
 
-.user {
+.convo {
     padding: 1em 0.8em;
     border-bottom: solid;
 }
 
-.user:hover {
+.convo:hover {
     background-color: rgba(0, 0, 0, 0.152);
     cursor: pointer;
 }
 
+.convo-selected {
+    background-color: rgba(0, 0, 0, 0.152);
+}
+
 .message-send-container {
     width: 100%;
-    height: 10%;
+    height: 2em;
 
     padding: 0;
     margin: 0;
 
     display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message-send-container > input {
+    height: 100%;
 }
 
 .message-send-button {
     width: 5em;
+    cursor: pointer;
+}
+
+.message-upload-image input[type="file"] {
+    display: none;
+}
+.message-upload-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: white;
+    cursor: pointer;
+    border: solid;
+    border-width: 1px;
+    padding: 0em 0.5em;
 }

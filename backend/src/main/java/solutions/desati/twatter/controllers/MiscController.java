@@ -15,12 +15,11 @@ import solutions.desati.twatter.services.UserService;
 @RestController
 @RequestMapping("/")
 public class MiscController {
-    @Autowired
-    MessageService messageService;
-
+    final MessageService messageService;
     final UserService userService;
-    public MiscController(UserService userService) {
+    public MiscController(UserService userService, MessageService messageService) {
         this.userService = userService;
+        this.messageService = messageService;
     }
 
     @Data

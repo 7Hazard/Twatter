@@ -27,12 +27,20 @@ public class Message {
     private String content;
 
     @Getter
+    private boolean isImage;
+
+    @Getter
     private LocalDateTime time;
 
     public Message(Conversation conversation, User from, String content) {
+        this(conversation, from, content, false);
+    }
+
+    public Message(Conversation conversation, User from, String content, boolean isImage) {
         this.conversation = conversation;
         this.from = from;
         this.content = content;
+        this.isImage = isImage;
         this.time = LocalDateTime.now();
     }
 
@@ -43,6 +51,7 @@ public class Message {
         private Long conversationId;
         private User.View from;
         private String content;
+        private boolean isImage;
         private String time;
     }
     public View getView() {
@@ -51,6 +60,7 @@ public class Message {
                 conversation.getId(),
                 from.getView(),
                 content,
+                isImage,
                 time.toString()
         );
     }

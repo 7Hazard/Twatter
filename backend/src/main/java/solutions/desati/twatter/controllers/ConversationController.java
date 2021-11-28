@@ -37,11 +37,12 @@ public class ConversationController {
     }
 
     @Data
-    static class SendMessage { private String content; }
+    static class SendMessage { private String content; private boolean isImage = false; }
     @PostMapping("/{id}/messages")
     public ResponseEntity sendMessage(@RequestAttribute User user, @PathVariable Long id, @RequestBody SendMessage body) {
+        if(body.content.isEmpty()) return new ResponseEntity(HttpStatus.BAD_REQUEST);
         var conv = conversationService.getByUserAndId(user, id);
         if(conv == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
-        return new ResponseEntity(messageService.send(conv, user, body.content).getView(), HttpStatus.OK);
+        return new ResponseEntity(messageService.send(conv, user, body.content, body.isImage).getView(), HttpStatus.OK);
     }
 }

@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Async, createInstance, IfFulfilled, IfPending, IfRejected, useAsync } from "react-async"
+import { Async, createInstance, IfFulfilled, IfRejected, useAsync } from "react-async"
 import { authorizedGet, authorizedPost, createPost, fetchUserPosts } from "../../api";
 import "./Feed.scoped.css";
 import { Post } from "../../interfaces/Post";
@@ -69,7 +69,7 @@ export default function () {
     );
 }
 
-function FollowButton({ username, self }) {
+function FollowButton({ username, self }: { username: string, self: User}) {
     const [toggle, setToggle] = useState(false)
 
     return (
