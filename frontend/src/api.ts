@@ -78,8 +78,6 @@ export async function createPost(post: string) {
         },
         body: JSON.stringify({ "content": post })
     })
-
-    alert(resp.status)
 }
 
 export async function searchUser(username: string) {

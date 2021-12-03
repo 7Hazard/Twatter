@@ -5,7 +5,7 @@ services:
     build: ./frontend
 
   frontend-balancer:
-    build: ./balancer
+    build: ./frontend-balancer
     ports:
       - "3000:80"
     links:

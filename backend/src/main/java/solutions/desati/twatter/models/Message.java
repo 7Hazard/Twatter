@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Entity
@@ -41,7 +42,7 @@ public class Message {
         this.from = from;
         this.content = content;
         this.isImage = isImage;
-        this.time = LocalDateTime.now();
+        this.time = LocalDateTime.now(ZoneId.of("GMT+02:00"));
     }
 
     @ToString

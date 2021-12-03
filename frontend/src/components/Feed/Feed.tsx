@@ -13,6 +13,8 @@ export default function () {
 
     let self = getSelf()
 
+    const [toggle, setToggle] = useState(false)
+
     return (
         <div className="posts-container">
             <h1>{username ? `${username}` : `Your feed`}</h1>
@@ -40,7 +42,9 @@ export default function () {
 
             {!username && (<>
                 <input id="postText" className="text-filed" type="text" name="text" placeholder="What are you doing now?" />
-                <input className="submit-button" type="submit" value="Post" onClick={() => createPost((document.getElementById("postText") as HTMLInputElement).value)} />
+                <input className="submit-button" type="submit" value="Post" onClick={
+                    () => createPost((document.getElementById("postText") as HTMLInputElement).value).then(_ => setToggle(!toggle))
+                } />
             </>)}
 
             <Async promise={username ? fetchUserPosts(username as string) : authorizedGet("feed", true)} >
