@@ -29,7 +29,8 @@ export default function({status}: {status: Status}) {
                 alert(JSON.stringify(e))
             }
             
-            navigate("/")
+            // navigate("/")
+            window.location.reload()
         }}>
             { status.missing.includes("username") && <input type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} /> }
             { status.missing.includes("name") && <input type="text" placeholder="Name" onChange={e => setName(e.target.value)} /> }
