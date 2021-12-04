@@ -16,6 +16,10 @@
 .messages-title-container {
     padding: 1em 1em;
     border-bottom: solid;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .users-list-container {

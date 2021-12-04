@@ -41,61 +41,62 @@ export default function () {
                     </Async.Fulfilled>
                 </Async>
             </div>
-            
-        <div className="message-view">
-            {selectedConvo && (<>
-                <div className="messages-title-container">
-                    <h1>{selectedConvo.name}</h1>
-                </div>
-                <div className="message-view-content">
-                    <Async promise={authorizedGet(`conversations/${selectedConvo.id}/messages`)} >
-                        <Async.Pending></Async.Pending>
-                        <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
-                        <Async.Fulfilled<Message[]>>
-                            {messages => (messages = messages.slice(0).reverse()).map((msg, i) => (
-                                <div className={`message ${msg.from.id == self.id ? "message-sent" : "message-received"}`}>
-                                    <div>
-                                        <div className="message-content">
-                                            {msg.image ? <img src={msg.content} /> : <p>{msg.content}</p>}
+
+            <div className="message-view">
+                {selectedConvo && (<>
+                    <div className="messages-title-container">
+                        <h1>{selectedConvo.name}</h1>
+                        <Link to={`/messages/${selectedConvo.id}/whiteboard`}>Whiteboard</Link>
+                    </div>
+                    <div className="message-view-content">
+                        <Async promise={authorizedGet(`conversations/${selectedConvo.id}/messages`)} >
+                            <Async.Pending></Async.Pending>
+                            <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
+                            <Async.Fulfilled<Message[]>>
+                                {messages => (messages = messages.slice(0).reverse()).map((msg, i) => (
+                                    <div className={`message ${msg.from.id == self.id ? "message-sent" : "message-received"}`}>
+                                        <div>
+                                            <div className="message-content">
+                                                {msg.image ? <img src={msg.content} /> : <p>{msg.content}</p>}
+                                            </div>
+                                            {(i == 0 || msg.from.id != messages[i - 1].from.id) && (
+                                                <Link to={`/user/${msg.from.username}`}>{msg.from.username}</Link>
+                                            )}
                                         </div>
-                                        {(i == 0 || msg.from.id != messages[i - 1].from.id) && (
-                                            <Link to={`/user/${msg.from.username}`}>{msg.from.username}</Link>
-                                        )}
                                     </div>
-                                </div>
-                            ))}
-                        </Async.Fulfilled>
-                    </Async>
-                </div>
-                <form className="message-send-container" autoComplete="off" onSubmit={e => {
-                    e.preventDefault()
-                    let content = e.currentTarget["msg"].value;
-                    if (content == "" || content == null) return
-                    authorizedPost(`conversations/${selectedConvo.id}/messages`, { content }, true)
-                        .then(result => setToggle(!toggle))
-                        .catch(resp => alert(resp.status))
-                    e.currentTarget["msg"].value = ""
-                }}>
-                    <label className="message-upload-image">
-                        <input type="file" onInput={async e => {
-                            let filebase64 = await fileToBase64(e.currentTarget.files![0])
-                            try {
-                                await authorizedPost(`conversations/${selectedConvo.id}/messages`, {
-                                    content: filebase64,
-                                    image: true
-                                }, true)
-                                setToggle(!toggle);
-                            } catch (e) {
-                                alert("Could not upload image")
-                            }
-                        }} />
-                        🏞️
-                    </label>
-                    <input name="msg" placeholder="Write your message here" />
-                    <input className="message-send-button" type="submit" value="Send" />
-                </form>
-            </>)}
-        </div>
+                                ))}
+                            </Async.Fulfilled>
+                        </Async>
+                    </div>
+                    <form className="message-send-container" autoComplete="off" onSubmit={e => {
+                        e.preventDefault()
+                        let content = e.currentTarget["msg"].value;
+                        if (content == "" || content == null) return
+                        authorizedPost(`conversations/${selectedConvo.id}/messages`, { content }, true)
+                            .then(result => setToggle(!toggle))
+                            .catch(resp => alert(resp.status))
+                        e.currentTarget["msg"].value = ""
+                    }}>
+                        <label className="message-upload-image">
+                            <input type="file" onInput={async e => {
+                                let filebase64 = await fileToBase64(e.currentTarget.files![0])
+                                try {
+                                    await authorizedPost(`conversations/${selectedConvo.id}/messages`, {
+                                        content: filebase64,
+                                        image: true
+                                    }, true)
+                                    setToggle(!toggle);
+                                } catch (e) {
+                                    alert("Could not upload image")
+                                }
+                            }} />
+                            🏞️
+                        </label>
+                        <input name="msg" placeholder="Write your message here" />
+                        <input className="message-send-button" type="submit" value="Send" />
+                    </form>
+                </>)}
+            </div>
         </div>
     </>);
 }

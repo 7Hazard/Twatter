@@ -17,6 +17,7 @@ import Message from "../Message/Message";
 import { Async } from "react-async";
 import Status from "../Status/Status";
 import { useState } from "react";
+import Whiteboard from "../Whiteboard/Whiteboard";
 
 export default function () {
     // order important, header must be after SignedRoutes (token check)
@@ -50,6 +51,7 @@ function SignedRoutes() {
                     <Route path="/signout" element={<SignOut />} />
                     <Route path="/user/:username" element={<Feed />} />
                     <Route path="/messages" element={<Message />} />
+                    <Route path="/messages/:conversationid/whiteboard" element={<Whiteboard />} />
                 </Routes>
             )
             }

@@ -1,0 +1,13 @@
+
+.whiteboard-container {
+    display: flex;
+    justify-content: center;
+
+    padding: 2em;
+}
+
+#whiteboard-canvas {
+    border: solid;
+
+    background-color: rgb(237, 237, 237);
+}
