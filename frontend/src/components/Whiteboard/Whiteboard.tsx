@@ -22,9 +22,10 @@ function Whiteboard() {
         setupCanvas()
     })
 
-    return (
+    return (<>
         <canvas id="whiteboard-canvas" width="1000" height="600"></canvas>
-    )
+        <canvas id="mouse-canvas" width="1000" height="600"></canvas>
+    </>)
 }
 
 let eventHandlers = new Map<string, (data: any) => void>()
@@ -53,7 +54,9 @@ function connect() {
                     return resolve(data)
                 }
                 else {
-                    eventHandlers.get(event)!(data)
+                    let handler = eventHandlers.get(event)
+                    if(handler) handler(data)
+                    else console.error("Unhandled event: "+event)
                 }
             } catch (error) {
                 console.error("Could not process ws message:", error)
@@ -65,16 +68,21 @@ function connect() {
         }
         ws.onclose = e => {
             console.log("ws closed:", e)
-
-            if(e.code == 1006) {
-                // locally closed
-                resolve(e)
-            }
-            else if(!ok) {
+            // if(e.code == 1006) {
+            //     // locally closed
+            //     resolve(e)
+            // }
+            // else 
+            if(!ok) {
                 reject(e)
             }
         }
     })
+}
+
+function sendEvent(event: string, data: any) {
+    data["event"] = event
+    ws.send(JSON.stringify(data))
 }
 
 function setupCanvas() {
@@ -92,9 +100,28 @@ function setupCanvas() {
     // last known position
     let pos = { x: 0, y: 0 };
 
-    // window.addEventListener('resize', resize);
-    document.addEventListener('mousemove', draw);
-    document.addEventListener('mousedown', setPosition);
+    canvas.addEventListener('mousemove', e => {
+
+        let fromX = pos.x, fromY = pos.y
+        setPosition(e)
+        sendEvent("mouse", {x: pos.x, y: pos.y})
+
+        // mouse left button must be pressed
+        if (e.buttons !== 1) return;
+
+        let toX = pos.x, toY = pos.y
+        draw(fromX, fromY, toX, toY)
+        sendEvent("draw", {fromX, fromY, toX, toY})
+    })
+
+    document.addEventListener('mousemove', e => {
+        
+    });
+    document.addEventListener('mousedown', e => {
+        setPosition(e)
+        draw(pos.x, pos.y, pos.x, pos.y)
+        sendEvent("draw", {fromX: pos.x, fromY: pos.y, toX: pos.x, toY: pos.y})
+    });
     document.addEventListener('mouseenter', setPosition);
 
     // new position from mouse event
@@ -104,20 +131,29 @@ function setupCanvas() {
         pos.y = e.clientY - rect.top;
     }
 
-    function draw(e: MouseEvent) {
-        // mouse left button must be pressed
-        if (e.buttons !== 1) return;
-
+    function draw(fromX: number, fromY: number, toX: number, toY: number) {
         ctx.beginPath(); // begin
 
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
         ctx.strokeStyle = '#000000';
 
-        ctx.moveTo(pos.x, pos.y); // from
-        setPosition(e);
-        ctx.lineTo(pos.x, pos.y); // to
+        ctx.moveTo(fromX, fromY); // from
+        ctx.lineTo(toX, toY); // to
 
         ctx.stroke(); // draw it!
     }
+
+    eventHandlers.set("draw", data => {
+        draw(data.fromX, data.fromY, data.toX, data.toY)
+    })
+
+    let mouseImage = new Image()
+    mouseImage.src = `https://freesvg.org/img/Mouse-Cursor-Pointer.png`
+    let mousectx = (document.getElementById("mouse-canvas") as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D
+    eventHandlers.set("mouse", data => {
+        mousectx.clearRect(0, 0, 1000, 600)
+        // TODO draw all mice
+        mousectx.drawImage(mouseImage, data.x-10, data.y-5, 25, 25)
+    })
 }

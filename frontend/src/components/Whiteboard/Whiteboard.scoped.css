@@ -10,4 +10,13 @@
     border: solid;
 
     background-color: rgb(237, 237, 237);
+
+    position: relative;
+}
+
+#mouse-canvas {
+    border: solid;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
 }
