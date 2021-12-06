@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "ws": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.2.1",
+    "typescript": "^4.5.2"
+  },
+  "scripts": {
+    "start": "node out/server.js"
+  },
+  "type": "module"
+}
