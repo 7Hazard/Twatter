@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Async } from "react-async";
+import { authorizedGet } from "../../api";
 import { getToken } from "../../cookies";
 import "./Whiteboard.scoped.css"
 
@@ -31,7 +32,12 @@ function Whiteboard() {
 let eventHandlers = new Map<string, (data: any) => void>()
 let ws: WebSocket
 let connectionPromise: Promise<unknown>
-function connect() {
+
+async function connect() {
+    let wsAddress = "ws://localhost:34343"
+
+    // authorizedGet("conversations/")
+
     return connectionPromise != undefined ? connectionPromise : connectionPromise = new Promise((resolve, reject) => {
         ws = new WebSocket("ws://localhost:34343");
         let ok = false

@@ -36,13 +36,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "follower"))
     private Set<User> followers = new HashSet<>();
 
+    // todo not eager load
     @Getter
-    @ManyToMany(mappedBy = "followers", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "followers", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<User> following = new HashSet<>();
-
-    @Getter
-    @OneToMany(mappedBy = "author")
-    private Set<Post> posts = new HashSet<>();
 
     @ManyToMany(mappedBy = "participants")
     private List<Conversation> conversations;

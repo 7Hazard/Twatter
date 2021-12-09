@@ -18,6 +18,7 @@ import { Async } from "react-async";
 import Status from "../Status/Status";
 import { useState } from "react";
 import Whiteboard from "../Whiteboard/Whiteboard";
+import NewPost from "../NewPost/NewPost";
 
 export default function () {
     // order important, header must be after SignedRoutes (token check)
@@ -48,6 +49,7 @@ function SignedRoutes() {
             {status && (
                 <Routes>
                     <Route path="/" element={<Feed />} />
+                    <Route path="/post" element={<NewPost />} />
                     <Route path="/signout" element={<SignOut />} />
                     <Route path="/user/:username" element={<Feed />} />
                     <Route path="/messages" element={<Message />} />

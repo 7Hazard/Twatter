@@ -1,10 +1,8 @@
 package solutions.desati.twatter.services;
 
 import org.springframework.stereotype.Service;
-import solutions.desati.twatter.models.Post;
 import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.models.UserToken;
-import solutions.desati.twatter.repositories.PostRepository;
 import solutions.desati.twatter.repositories.UserRepository;
 import solutions.desati.twatter.repositories.UserTokenRepository;
 
@@ -15,11 +13,9 @@ import java.util.Set;
 public class UserService {
 
     final UserTokenRepository userTokenRepository;
-    final PostRepository postRepository;
     final UserRepository userRepository;
-    public UserService(UserRepository userRepository, PostRepository postRepository, UserTokenRepository userTokenRepository) {
+    public UserService(UserRepository userRepository, UserTokenRepository userTokenRepository) {
         this.userRepository = userRepository;
-        this.postRepository = postRepository;
         this.userTokenRepository = userTokenRepository;
     }
 
@@ -36,9 +32,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public List<Post> getFeed(User user) {
-        return postRepository.findByAuthor_FollowersIsInOrAuthorOrderByTimeDesc(Set.of(user), user);
-    }
+//    public List<Post> getFeed(User user) {
+//        return postRepository.findByAuthor_FollowersIsInOrAuthorOrderByTimeDesc(Set.of(user), user);
+//    }
 
     public void toggleFollow(User follower, User following) {
         var removed = following.getFollowers().removeIf(user -> user.getId() == follower.getId());

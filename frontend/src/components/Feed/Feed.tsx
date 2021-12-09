@@ -1,11 +1,12 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Async, createInstance, IfFulfilled, IfRejected, useAsync } from "react-async"
+import { Async } from "react-async"
 import { authorizedGet, authorizedPost, createPost, fetchUserPosts } from "../../api";
 import "./Feed.scoped.css";
 import { Post } from "../../interfaces/Post";
 import { getSelf } from "../../cookies";
 import { User } from "../../interfaces/User";
 import { useState } from "react";
+import Chart from "../Chart/Chart";
 
 export default function () {
     const { username } = useParams();
@@ -49,21 +50,11 @@ export default function () {
 
             <Async promise={username ? fetchUserPosts(username as string) : authorizedGet("feed", true)} >
                 <Async.Pending></Async.Pending>
-                <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
+                <Async.Rejected>{error => `${error}`}</Async.Rejected>
                 <Async.Fulfilled<Post[]>>
                     {posts => (
                         <div className="posts-scroll">
-                            {posts.map(post => (
-                                // Post container
-                                <div className="post-container">
-                                    {/* Header container */}
-                                    <div className="post-header-container">
-                                        <Link to={`/user/${post.author.username}`}>{post.author.username}</Link>
-                                        <p>&nbsp;·&nbsp;{(new Date(post.time).toLocaleString())}</p>
-                                    </div>
-                                    <p>{post.content}</p>
-                                </div>
-                            ))}
+                            {posts.map(post => <SinglePost post={post} />)}
                         </div>
                     )}
                 </Async.Fulfilled>
@@ -73,7 +64,26 @@ export default function () {
     );
 }
 
-function FollowButton({ username, self }: { username: string, self: User}) {
+function SinglePost({ post }: { post: Post }) {
+    return (
+        // Post container
+        <div className="post-container">
+            {/* Header container */}
+            <div className="post-header-container">
+                <Link to={`/user/${post.author.username}`}>{post.author.username}</Link>
+                <p>&nbsp;·&nbsp;{(new Date(post.created).toLocaleString())}</p>
+            </div>
+            <p>{post.content}</p>
+            {post.charts.map(chart => (
+                <div style={{backgroundColor: "whitesmoke", padding:"0.5em", marginTop:"1em"}}>
+                    {chart && <Chart data={chart.data} /> || "Invalid chart data"}
+                </div>
+            ))}
+        </div>
+    )
+}
+
+function FollowButton({ username, self }: { username: string, self: User }) {
     const [toggle, setToggle] = useState(false)
 
     return (

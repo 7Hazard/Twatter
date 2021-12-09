@@ -16,6 +16,7 @@ export default function () {
             {isAuthenticated() ? (<>
                 <SearchBar />
                 <nav>
+                    <Link to="/post">Post</Link>
                     <Link to="/">Feed</Link>
                     <Link to="/messages">Messages</Link>
                     <Link to="/signout">Sign Out</Link>

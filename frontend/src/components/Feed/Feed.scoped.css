@@ -1,7 +1,6 @@
 .posts-container {
-    height: 95%;
-
-    padding: 1em;
+    height: 100%;
+    padding-top: 1em;
 }
 
 .posts-container h1 {

@@ -7,14 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import solutions.desati.twatter.models.Conversation;
 import solutions.desati.twatter.models.Message;
-import solutions.desati.twatter.models.Post;
 import solutions.desati.twatter.models.User;
-import solutions.desati.twatter.services.AuthService;
 import solutions.desati.twatter.services.ConversationService;
 import solutions.desati.twatter.services.MessageService;
-import solutions.desati.twatter.services.PostService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/conversations")

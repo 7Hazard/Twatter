@@ -1,0 +1,27 @@
+package solutions.desati.twatter.`post-service`
+
+import io.vertx.core.AbstractVerticle
+import io.vertx.core.Promise
+import io.vertx.core.http.HttpServer
+import io.vertx.ext.auth.jwt.JWTAuth
+import io.vertx.ext.web.Router
+
+lateinit var server: HttpServer
+lateinit var router: Router
+lateinit var authProvider: JWTAuth
+
+class MainVerticle : AbstractVerticle() {
+
+  override fun start(startPromise: Promise<Void>) {
+
+    connectDatabase()
+
+    server = vertx.createHttpServer()
+    router = Router.router(vertx)
+
+    // Routes
+    routes()
+
+    server.requestHandler(router).listen(34566)
+  }
+}

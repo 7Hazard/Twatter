@@ -9,17 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import solutions.desati.twatter.models.Conversation;
-import solutions.desati.twatter.models.Post;
 import solutions.desati.twatter.models.User;
 import solutions.desati.twatter.models.UserToken;
 import solutions.desati.twatter.repositories.ConversationRepository;
-import solutions.desati.twatter.repositories.PostRepository;
 import solutions.desati.twatter.repositories.UserRepository;
 import solutions.desati.twatter.repositories.UserTokenRepository;
 
-import java.util.List;
-
-import static org.hamcrest.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
