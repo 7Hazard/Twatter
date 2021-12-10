@@ -1,7 +1,6 @@
 package solutions.desati.twatter.services;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import solutions.desati.twatter.Env;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ChartService {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        var uri = UriComponentsBuilder.fromHttpUrl("http://localhost:34567/charts");
+        var uri = UriComponentsBuilder.fromHttpUrl("http://"+ Env.chartsServiceHost +"/charts");
         for(var chartid: chartIds)
             uri.queryParam("id", chartid);
 
@@ -33,16 +33,12 @@ public class ChartService {
         return new JSONArray(response.getBody());
     }
 
-    public JSONArray create(JSONObject[] charts) {
-        return create(new JSONArray(charts));
-    }
-
     public JSONArray create(JSONArray charts) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         var request = new HttpEntity(charts.toString(), headers);
         var response = new RestTemplate().exchange(
-                "http://localhost:34567/charts",
+                "http://"+ Env.chartsServiceHost+"/charts",
                 HttpMethod.POST,
                 request,
                 String.class

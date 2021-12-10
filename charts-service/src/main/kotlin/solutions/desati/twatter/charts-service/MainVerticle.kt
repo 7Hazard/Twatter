@@ -13,7 +13,7 @@ class MainVerticle : AbstractVerticle() {
 
   override fun start(startPromise: Promise<Void>) {
 
-    ConnectDatabase()
+    connectDatabase()
 
     server = vertx.createHttpServer()
     router = Router.router(vertx)

@@ -11,19 +11,19 @@ import org.junit.runner.RunWith
 @RunWith(VertxUnitRunner::class)
 class TestMainVerticle {
 
-  @Rule
-  @JvmField
-  val rule = RunTestOnContext()
+//  @Rule
+//  @JvmField
+//  val rule = RunTestOnContext()
+//
+//  @Before
+//  fun deploy_verticle(testContext: TestContext) {
+//    val vertx = rule.vertx()
+//    vertx.deployVerticle(MainVerticle(), testContext.asyncAssertSuccess())
+//  }
 
-  @Before
-  fun deploy_verticle(testContext: TestContext) {
-    val vertx = rule.vertx()
-    vertx.deployVerticle(MainVerticle(), testContext.asyncAssertSuccess())
-  }
-
-  @Test
-  fun verticle_deployed(testContext: TestContext) {
-    val async = testContext.async()
-    async.complete()
-  }
+//  @Test
+//  fun verticle_deployed(testContext: TestContext) {
+//    val async = testContext.async()
+//    async.complete()
+//  }
 }

@@ -43,8 +43,7 @@ dependencies {
   implementation("org.jetbrains.exposed:exposed-core:0.36.2")
   implementation("org.jetbrains.exposed:exposed-jdbc:0.36.2")
   implementation("org.jetbrains.exposed:exposed-dao:0.36.2")
-  implementation("com.zaxxer:HikariCP:5.0.0")
-  implementation("com.impossibl.pgjdbc-ng:pgjdbc-ng:0.8.9")
+  implementation("org.postgresql:postgresql:42.3.1")
   testImplementation("io.vertx:vertx-unit")
   testImplementation("junit:junit:4.13.1")
 }

@@ -3,8 +3,6 @@ twatter:
     redirect: http://localhost:3000
     github:
       client_id: f370994586d726afd433
-  imgur:
-    client-id: ${TWATTER_IMGUR_CLIENT_ID}
 
 spring:
   jpa:
@@ -18,7 +16,7 @@ spring:
             non_contextual_creation: true
 
   datasource:
-    url: "jdbc:postgresql://${TWATTER_DB_HOST}:5432/postgres"
+    url: "jdbc:postgresql://${TWATTER_DB_HOST}/postgres"
     username: "postgres"
     password: ${TWATTER_DB_PW}
 

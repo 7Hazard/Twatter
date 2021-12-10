@@ -7,7 +7,6 @@ import solutions.desati.twatter.repositories.UserRepository;
 import solutions.desati.twatter.repositories.UserTokenRepository;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -31,10 +30,6 @@ public class UserService {
     public User get(String username) {
         return userRepository.findByUsername(username);
     }
-
-//    public List<Post> getFeed(User user) {
-//        return postRepository.findByAuthor_FollowersIsInOrAuthorOrderByTimeDesc(Set.of(user), user);
-//    }
 
     public void toggleFollow(User follower, User following) {
         var removed = following.getFollowers().removeIf(user -> user.getId() == follower.getId());

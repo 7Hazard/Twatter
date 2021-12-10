@@ -1,7 +1,5 @@
 package solutions.desati.twatter.`charts-service`
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import io.vertx.core.json.JsonObject
 import io.vertx.kotlin.core.json.jsonObjectOf
 import org.jetbrains.exposed.dao.LongEntity
@@ -27,13 +25,13 @@ class Chart(id: EntityID<Long>) : LongEntity(id) {
   )
 }
 
-fun ConnectDatabase() {
-  val config = HikariConfig()
-  config.jdbcUrl = "jdbc:pgsql://localhost:5432"
-  config.username = "charts"
-  config.dataSourceClassName = "com.impossibl.postgres.jdbc.PGDataSource"
-  val hikariDataSource = HikariDataSource(config)
-  Database.connect(hikariDataSource)
+fun connectDatabase() {
+  Database.connect(
+    "jdbc:postgresql://${Env.dbHost}/",
+    "org.postgresql.ds.PGSimpleDataSource",
+    "postgres",
+    "jizzle"
+  )
 
   transaction {
     SchemaUtils.createMissingTablesAndColumns(

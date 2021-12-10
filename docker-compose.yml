@@ -12,22 +12,56 @@ services:
       - frontend1
       - frontend2
 
+  # database:
+  #   build: ./database
+  #   environment:
+  #     - POSTGRES_PASSWORD=${TWATTER_DB_PW}
+  #   ports:
+  #     - "5432:5432"
+  database:
+    image: postgres
+    environment:
+      - "POSTGRES_PASSWORD=jizzle"
+    ports:
+      - "5432:5432"
+
   backend:
     build: ./backend
     environment:
-      - TWATTER_GITHUB_CLIENT_SECRET=${TWATTER_GITHUB_CLIENT_SECRET}
+      - IS_CONTAINER=1
+      - TWATTER_DB_HOST=database
       - TWATTER_DB_PW=${TWATTER_DB_PW}
-      - TWATTER_DB_HOST=${TWATTER_DB_HOST}
+      - TWATTER_GITHUB_CLIENT_SECRET=${TWATTER_GITHUB_CLIENT_SECRET}
       - TWATTER_IMGUR_CLIENT_ID=${TWATTER_IMGUR_CLIENT_ID}
     ports:
       - "8080:8080"
     links:
       - database
+      - posts-service
+      - charts-service
 
-  database:
+  # posts
+  posts-database:
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=${TWATTER_DB_PW}
-    ports:
-      - "5432:5432"
+      - "POSTGRES_PASSWORD=jizzle"
+  posts-service:
+    build: ./post-service
+    environment:
+      - IS_CONTAINER=1
+      - TWATTER_DB_HOST=posts-database
+    links:
+      - posts-database
 
+  # charts
+  charts-database:
+    image: postgres
+    environment:
+      - "POSTGRES_PASSWORD=jizzle"
+  charts-service:
+    build: ./charts-service
+    environment:
+      - IS_CONTAINER=1
+      - TWATTER_DB_HOST=charts-database
+    links:
+      - charts-database

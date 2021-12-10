@@ -8,7 +8,6 @@ import io.vertx.ext.web.Router
 
 lateinit var server: HttpServer
 lateinit var router: Router
-lateinit var authProvider: JWTAuth
 
 class MainVerticle : AbstractVerticle() {
 

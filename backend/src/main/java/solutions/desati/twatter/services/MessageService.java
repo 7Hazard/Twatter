@@ -1,15 +1,13 @@
 package solutions.desati.twatter.services;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import solutions.desati.twatter.Env;
 import solutions.desati.twatter.models.Conversation;
 import solutions.desati.twatter.models.Message;
 import solutions.desati.twatter.models.User;
@@ -30,9 +28,6 @@ public class MessageService {
         this.conversationRepository = conversationRepository;
     }
 
-    @Value("${twatter.imgur.client-id}")
-    private String imgurClientId;
-
     public Message send(User from, User to, String content) {
         var list = List.of(from, to);
         var conv = conversationRepository.findByParticipants(list, list.size());
@@ -51,7 +46,7 @@ public class MessageService {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-            headers.add("Authorization", "Client-ID "+imgurClientId);
+            headers.add("Authorization", "Client-ID "+ Env.imgurClientId);
 
 //            var map = new LinkedMultiValueMap<String, String>();
 //            map.add("image", content);

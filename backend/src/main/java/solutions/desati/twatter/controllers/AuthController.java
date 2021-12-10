@@ -2,11 +2,11 @@ package solutions.desati.twatter.controllers;
 
 import lombok.Data;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import solutions.desati.twatter.Env;
 import solutions.desati.twatter.services.AuthService;
 import solutions.desati.twatter.services.UserService;
 
@@ -34,7 +34,7 @@ public class AuthController {
         json.put("github.client_id", githubClientId);
 
         // debug
-        json.put("github.client_secret", System.getenv("TWATTER_GITHUB_CLIENT_SECRET"));
+        json.put("github.client_secret", Env.githubClientSecret);
 
         return new ResponseEntity(json.toString(), HttpStatus.OK);
     }

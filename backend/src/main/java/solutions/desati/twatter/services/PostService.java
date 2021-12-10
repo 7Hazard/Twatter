@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import solutions.desati.twatter.Env;
 import solutions.desati.twatter.models.User;
 
 import java.util.HashMap;
@@ -53,7 +54,7 @@ public class PostService {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         var request = new HttpEntity(posts.toString(), headers);
         var response = new RestTemplate().exchange(
-                "http://localhost:34566/posts",
+                "http://"+ Env.postsServiceHost +"/posts",
                 HttpMethod.POST,
                 request,
                 String.class
@@ -72,7 +73,7 @@ public class PostService {
     }
 
     public JSONArray get(List<Long> authors) {
-        var uri = UriComponentsBuilder.fromHttpUrl("http://localhost:34566/posts");
+        var uri = UriComponentsBuilder.fromHttpUrl("http://"+ Env.postsServiceHost+"/posts");
         for(var author : authors) {
             uri.queryParam("author", author);
         }
@@ -129,9 +130,6 @@ public class PostService {
         var following = user.getFollowing();
         var authorIds = following.stream().map(User::getId).collect(Collectors.toList());
         authorIds.add(user.getId());
-
-        if(authorIds.isEmpty())
-            return new JSONArray();
 
         return get(authorIds);
     }
