@@ -50,7 +50,10 @@ export default function () {
 
             <Async promise={username ? fetchUserPosts(username as string) : authorizedGet("feed", true)} >
                 <Async.Pending></Async.Pending>
-                <Async.Rejected>{error => `${error}`}</Async.Rejected>
+                <Async.Rejected>
+                    Could not fetch posts
+                    {error => console.log(error)}
+                </Async.Rejected>
                 <Async.Fulfilled<Post[]>>
                     {posts => (
                         <div className="posts-scroll">

@@ -22,6 +22,12 @@ eventHandlers.set("draw", (client, data) => {
     }
 })
 
+eventHandlers.set("fullupdate", (client, data) => {
+    for (const otherClient of wss.clients) {
+        if(otherClient != client)
+            sendEvent("fullupdate", data, otherClient)
+    }
+})
 
 // Setup ws server
 wss.on('connection', function connection(client) {

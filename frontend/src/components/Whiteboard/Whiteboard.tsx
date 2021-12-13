@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Async } from "react-async";
 import { authorizedGet } from "../../api";
 import { getToken } from "../../cookies";
@@ -18,25 +18,55 @@ export default function () {
     </>);
 }
 
+let whiteboardSetConnectionState: (state: string) => void
 function Whiteboard() {
+    const [connectionState, setConnectionState] = useState(wsConnectionState)
+    connectionUpdateHandlers.push(() => {
+        setConnectionState(wsConnectionState)
+    })
+
     useEffect(() => {
         setupCanvas()
     })
 
-    return (<>
-        <canvas id="whiteboard-canvas" width="1000" height="600"></canvas>
-        <canvas id="mouse-canvas" width="1000" height="600"></canvas>
-    </>)
+    return (<div style={{display: "flex", flexDirection:"column"}}>
+        <p>{connectionState}</p>
+        <div style={{padding: "0.3em 0", display: "flex", justifyContent: "center"}}>
+            <button onClick={e => clearCanvas()}>Clear</button>
+        </div>
+        <div style={{display: "flex"}}>
+            <canvas id="whiteboard-canvas" width="1000" height="600" style={{
+
+            }}></canvas>
+            <canvas id="mouse-canvas" width="1000" height="600" style={{
+                border: "solid",
+                position: "absolute",
+                zIndex: 1,
+                pointerEvents: "none"
+            }}></canvas>
+        </div>
+    </div>)
 }
 
+let connectionUpdateHandlers: (() => void)[] = []
 let eventHandlers = new Map<string, (data: any) => void>()
+let wsConnectionState = "Disconnected"
 let ws: WebSocket
 let connectionPromise: Promise<unknown>
 
 async function connect() {
-    let wsAddress = "ws://localhost:34343"
+    function updateConnectionInfo() {
+        for (let i = 0; i < connectionUpdateHandlers.length; i++) {
+            let fn = connectionUpdateHandlers[i]
+            try {
+                fn()
+            } catch (error) {
+                connectionUpdateHandlers.splice(i, 1)
+            }
+        }
+    }
 
-    // authorizedGet("conversations/")
+    let wsAddress = "ws://localhost:34343"
 
     return connectionPromise != undefined ? connectionPromise : connectionPromise = new Promise((resolve, reject) => {
         ws = new WebSocket("ws://localhost:34343");
@@ -47,6 +77,7 @@ async function connect() {
                 token: getToken()
             }))
             console.log("Verifying");
+            
         }
         ws.onmessage = m => {
             try {
@@ -57,6 +88,8 @@ async function connect() {
                 if(event == "connected") {
                     console.log("Verified");
                     ok = true
+                    wsConnectionState = "Connected"
+                    updateConnectionInfo()
                     return resolve(data)
                 }
                 else {
@@ -79,6 +112,8 @@ async function connect() {
             //     resolve(e)
             // }
             // else 
+            wsConnectionState = "Disconnected"
+            updateConnectionInfo()
             if(!ok) {
                 reject(e)
             }
@@ -91,9 +126,11 @@ function sendEvent(event: string, data: any) {
     ws.send(JSON.stringify(data))
 }
 
+let canvas: HTMLCanvasElement
+let ctx: CanvasRenderingContext2D
 function setupCanvas() {
     // https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse/30684711#30684711
-    let canvas = document.getElementById("whiteboard-canvas") as HTMLCanvasElement;
+    canvas = document.getElementById("whiteboard-canvas") as HTMLCanvasElement;
 
     if(!canvas) {
         console.error("Could not find whiteboard canvas");
@@ -101,7 +138,7 @@ function setupCanvas() {
     } else console.log("Found whiteboard canvas");
 
     // get canvas 2D context and set him correct size
-    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     // last known position
     let pos = { x: 0, y: 0 };
@@ -162,4 +199,26 @@ function setupCanvas() {
         // TODO draw all mice
         mousectx.drawImage(mouseImage, data.x-10, data.y-5, 25, 25)
     })
+
+    eventHandlers.set("fullupdate", data => {
+        console.log("fullupdate");
+        applyImage(data.url)
+    })
+}
+
+function clearCanvas() {
+    ctx.beginPath();
+    ctx.rect(0, 0, 1000, 600);
+    ctx.fillStyle = "rgb(237, 237, 237)";
+    ctx.fill();
+
+    sendEvent("fullupdate", {url: canvas.toDataURL()})
+}
+
+function applyImage(imagedata: string) {
+    var image = new Image();
+    image.onload=() => {
+        ctx.drawImage(image, 0, 0)
+    };
+    image.src = imagedata;
 }
