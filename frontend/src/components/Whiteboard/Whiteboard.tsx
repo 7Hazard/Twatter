@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Async } from "react-async";
+import { useParams } from "react-router";
 import { authorizedGet } from "../../api";
 import { getToken } from "../../cookies";
 import "./Whiteboard.scoped.css"
 
 export default function () {
+    const { conversationId } = useParams();
+
     return (<>
         <div className="whiteboard-container">
-            <Async promise={connect()} key={""} >
+            <Async promise={connect(conversationId as string)} key={""} >
                 <Async.Pending></Async.Pending>
                 <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
                 <Async.Fulfilled>
@@ -27,6 +30,15 @@ function Whiteboard() {
 
     useEffect(() => {
         setupCanvas()
+
+        function beforeUnload() {
+            if(connectionState != "Connected") return
+        }
+        window.addEventListener("beforeunload", beforeUnload)
+
+        return () => {
+            window.removeEventListener("beforeunload", beforeUnload)
+        }
     })
 
     return (<div style={{display: "flex", flexDirection:"column"}}>
@@ -54,7 +66,7 @@ let wsConnectionState = "Disconnected"
 let ws: WebSocket
 let connectionPromise: Promise<unknown>
 
-async function connect() {
+async function connect(conversationId: string) {
     function updateConnectionInfo() {
         for (let i = 0; i < connectionUpdateHandlers.length; i++) {
             let fn = connectionUpdateHandlers[i]
@@ -74,7 +86,8 @@ async function connect() {
         ws.onopen = e => {
             ws.send(JSON.stringify({
                 event: "verify",
-                token: getToken()
+                token: getToken(),
+                conversationId
             }))
             console.log("Verifying");
             
@@ -201,8 +214,11 @@ function setupCanvas() {
     })
 
     eventHandlers.set("fullupdate", data => {
-        console.log("fullupdate");
         applyImage(data.url)
+    })
+
+    eventHandlers.set("save", data => {
+        sendEvent("save", {url: canvas.toDataURL()})
     })
 }
 

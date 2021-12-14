@@ -53,7 +53,7 @@ function SignedRoutes() {
                     <Route path="/signout" element={<SignOut />} />
                     <Route path="/user/:username" element={<Feed />} />
                     <Route path="/messages" element={<Message />} />
-                    <Route path="/messages/:conversationid/whiteboard" element={<Whiteboard />} />
+                    <Route path="/messages/:conversationId/whiteboard" element={<Whiteboard />} />
                 </Routes>
             )
             }

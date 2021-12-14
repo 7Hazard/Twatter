@@ -4,30 +4,63 @@ import { WebSocketServer } from 'ws';
 // Instantiate websocket server
 const wss = new WebSocketServer({ port: 34343 });
 
+let clientConversation = new Map<WebSocket, string>()
+let conversationClients = new Map<string, Set<WebSocket>>()
+function getClients(conversation: string = undefined): Set<WebSocket> {
+    if(conversation && conversationClients.has(conversation)) return conversationClients.get(conversation)
+    else if(!conversation) return wss.clients
+    else return undefined
+}
+
 // Define event handlers
 let eventHandlers = new Map<string, (client: WebSocket, data: any) => void>()
 
 eventHandlers.set("mouse", (client, data) => {
-    for (const otherClient of wss.clients) {
+    const convo = clientConversation.get(client)
+    for (const otherClient of getClients(convo)) {
         if(otherClient != client)
             sendEvent("mouse", data, otherClient)
     }
 })
 
 eventHandlers.set("draw", (client, data) => {
-    // TODO sent mouse pos of all mice
-    for (const otherClient of wss.clients) {
+    const convo = clientConversation.get(client)
+    for (const otherClient of getClients(convo)) {
         if(otherClient != client)
             sendEvent("draw", data, otherClient)
     }
 })
 
 eventHandlers.set("fullupdate", (client, data) => {
-    for (const otherClient of wss.clients) {
+    const convo = clientConversation.get(client)
+    for (const otherClient of getClients(convo)) {
         if(otherClient != client)
             sendEvent("fullupdate", data, otherClient)
     }
 })
+
+eventHandlers.set("save", (client, data) => {
+    const convo = clientConversation.get(client)
+    console.log("Save "+convo);
+})
+
+// Request save from each active whiteboard every 5s
+setInterval(() => {
+    for (const [convo, clients] of conversationClients) {
+        let ok = false
+        while (clients.size > 0 && !ok) {
+            let rand = Math.floor(Math.random()*clients.size)
+            let client = Array.from(clients)[rand]
+            try {
+                sendEvent("save", {}, client)
+                ok = true
+            } catch (error) {
+                console.error("Client unreachable");
+                disconnectClient(client)
+            }
+        }
+    }
+}, 10000)
 
 // Setup ws server
 wss.on('connection', function connection(client) {
@@ -38,7 +71,15 @@ wss.on('connection', function connection(client) {
         delete eventData.event
 
         if(event == "verify") {
-            // TODO actually verify
+            // TODO actually verify token
+            const convo = eventData.conversationId
+            clientConversation.set(client, convo)
+            let convoclients = conversationClients.get(convo)
+            if(!convoclients) {
+                convoclients = new Set<WebSocket>()
+                conversationClients.set(convo, convoclients)
+            }
+            convoclients.add(client)
             sendEvent("connected", {}, client)
         }
         else {
@@ -56,4 +97,12 @@ wss.on('connection', function connection(client) {
 function sendEvent(event: string, data: any, client: WebSocket) {
     data["event"] = event
     client.send(JSON.stringify(data))
+}
+
+function disconnectClient(client: WebSocket) {
+    const convo = clientConversation.get(client)
+    const convoClients = conversationClients.get(convo)
+    convoClients.delete(client)
+    if (convoClients.size == 0) conversationClients.delete(convo)
+    client.close() // TODO code
 }
