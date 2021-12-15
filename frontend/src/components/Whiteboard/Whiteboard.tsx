@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Async } from "react-async";
 import { useParams } from "react-router";
-import { authorizedGet } from "../../api";
 import { getToken } from "../../cookies";
 import "./Whiteboard.scoped.css"
 
@@ -12,32 +11,38 @@ export default function () {
         <div className="whiteboard-container">
             <Async promise={connect(conversationId as string)} key={""} >
                 <Async.Pending></Async.Pending>
-                <Async.Rejected>{error => `${error.message}`}</Async.Rejected>
+                <Async.Rejected>{error => `Cloud not load whiteboard`}</Async.Rejected>
                 <Async.Fulfilled>
-                    {_ => Whiteboard()}
+                    {state => <Whiteboard state={state} />}
                 </Async.Fulfilled>
             </Async>
         </div>
     </>);
 }
 
-let whiteboardSetConnectionState: (state: string) => void
-function Whiteboard() {
+function Whiteboard({ state }: { state:any }) {
     const [connectionState, setConnectionState] = useState(wsConnectionState)
     connectionUpdateHandlers.push(() => {
         setConnectionState(wsConnectionState)
     })
 
     useEffect(() => {
-        setupCanvas()
+        setupCanvas(state)
 
         function beforeUnload() {
             if(connectionState != "Connected") return
+            console.log("save unload")
+            sendEvent("save", {image: canvas.toDataURL()})
         }
         window.addEventListener("beforeunload", beforeUnload)
 
         return () => {
+            canvas.removeEventListener('mousemove', mousemove)
+            document.removeEventListener('mousedown', mousedown);
+            document.removeEventListener('mouseenter', setPosition);
             window.removeEventListener("beforeunload", beforeUnload)
+            ws.close()
+            connectionPromise = undefined
         }
     })
 
@@ -64,7 +69,7 @@ let connectionUpdateHandlers: (() => void)[] = []
 let eventHandlers = new Map<string, (data: any) => void>()
 let wsConnectionState = "Disconnected"
 let ws: WebSocket
-let connectionPromise: Promise<unknown>
+let connectionPromise: Promise<unknown> | undefined
 
 async function connect(conversationId: string) {
     function updateConnectionInfo() {
@@ -97,6 +102,7 @@ async function connect(conversationId: string) {
                 let data = JSON.parse(m.data)
                 let event = data.event
                 delete data.event
+                // console.log("Event "+event)
 
                 if(event == "connected") {
                     console.log("Verified");
@@ -139,9 +145,51 @@ function sendEvent(event: string, data: any) {
     ws.send(JSON.stringify(data))
 }
 
+// last known position
+let pos = { x: 0, y: 0 };
+
+function mousemove(e: MouseEvent) {
+
+    let fromX = pos.x, fromY = pos.y
+    setPosition(e)
+    sendEvent("mouse", {x: pos.x, y: pos.y})
+
+    // mouse left button must be pressed
+    if (e.buttons !== 1) return;
+
+    let toX = pos.x, toY = pos.y
+    draw(fromX, fromY, toX, toY)
+    sendEvent("draw", {fromX, fromY, toX, toY})
+}
+
+function mousedown(e: MouseEvent) {
+    setPosition(e)
+    draw(pos.x, pos.y, pos.x, pos.y)
+    sendEvent("draw", {fromX: pos.x, fromY: pos.y, toX: pos.x, toY: pos.y})
+}
+
+function setPosition(e: MouseEvent) {
+    let rect = canvas.getBoundingClientRect();
+    pos.x = e.clientX - rect.left;
+    pos.y = e.clientY - rect.top;
+}
+
+function draw(fromX: number, fromY: number, toX: number, toY: number) {
+    ctx.beginPath(); // begin
+
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000000';
+
+    ctx.moveTo(fromX, fromY); // from
+    ctx.lineTo(toX, toY); // to
+
+    ctx.stroke(); // draw it!
+}
+
 let canvas: HTMLCanvasElement
 let ctx: CanvasRenderingContext2D
-function setupCanvas() {
+function setupCanvas(state: any) {
     // https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse/30684711#30684711
     canvas = document.getElementById("whiteboard-canvas") as HTMLCanvasElement;
 
@@ -153,52 +201,14 @@ function setupCanvas() {
     // get canvas 2D context and set him correct size
     ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    // last known position
-    let pos = { x: 0, y: 0 };
+    // apply image if exists
+    if(state.image) applyImage(state.image)
 
-    canvas.addEventListener('mousemove', e => {
-
-        let fromX = pos.x, fromY = pos.y
-        setPosition(e)
-        sendEvent("mouse", {x: pos.x, y: pos.y})
-
-        // mouse left button must be pressed
-        if (e.buttons !== 1) return;
-
-        let toX = pos.x, toY = pos.y
-        draw(fromX, fromY, toX, toY)
-        sendEvent("draw", {fromX, fromY, toX, toY})
-    })
-
-    document.addEventListener('mousemove', e => {
-        
-    });
-    document.addEventListener('mousedown', e => {
-        setPosition(e)
-        draw(pos.x, pos.y, pos.x, pos.y)
-        sendEvent("draw", {fromX: pos.x, fromY: pos.y, toX: pos.x, toY: pos.y})
-    });
+    canvas.addEventListener('mousemove', mousemove)
+    document.addEventListener('mousedown', mousedown);
     document.addEventListener('mouseenter', setPosition);
 
     // new position from mouse event
-    function setPosition(e: MouseEvent) {
-        let rect = canvas.getBoundingClientRect();
-        pos.x = e.clientX - rect.left;
-        pos.y = e.clientY - rect.top;
-    }
-
-    function draw(fromX: number, fromY: number, toX: number, toY: number) {
-        ctx.beginPath(); // begin
-
-        ctx.lineWidth = 5;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = '#000000';
-
-        ctx.moveTo(fromX, fromY); // from
-        ctx.lineTo(toX, toY); // to
-
-        ctx.stroke(); // draw it!
-    }
 
     eventHandlers.set("draw", data => {
         draw(data.fromX, data.fromY, data.toX, data.toY)
@@ -214,11 +224,12 @@ function setupCanvas() {
     })
 
     eventHandlers.set("fullupdate", data => {
-        applyImage(data.url)
+        applyImage(data.image)
     })
 
     eventHandlers.set("save", data => {
-        sendEvent("save", {url: canvas.toDataURL()})
+        console.log("Save requested")
+        sendEvent("save", {image: canvas.toDataURL()})
     })
 }
 
@@ -228,7 +239,7 @@ function clearCanvas() {
     ctx.fillStyle = "rgb(237, 237, 237)";
     ctx.fill();
 
-    sendEvent("fullupdate", {url: canvas.toDataURL()})
+    sendEvent("fullupdate", {image: canvas.toDataURL()})
 }
 
 function applyImage(imagedata: string) {

@@ -5,17 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-node",
+            "type": "node",
             "request": "launch",
             "name": "Launch",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/out/server.js",
+            // "program": "${workspaceFolder}/out/server.js",
+            "args": ["--es-module-specifier-resolution=node", "${workspaceFolder}/out/server.js"],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
-            ]
+            ],
+            "console": "integratedTerminal"
         }
     ]
 }
