@@ -11,7 +11,7 @@ public class Env {
         isContainer = System.getenv("IS_CONTAINER") != null;
         githubClientSecret = System.getenv("TWATTER_GITHUB_CLIENT_SECRET");
         imgurClientId = System.getenv("TWATTER_IMGUR_CLIENT_ID");
-        postsServiceHost = isContainer ? "posts-service" : "localhost:34566";
-        chartsServiceHost = isContainer ? "charts-service" : "localhost:34567";
+        postsServiceHost = isContainer ? "posts-service:34566" : "localhost:34566";
+        chartsServiceHost = isContainer ? "charts-service:34567" : "localhost:34567";
     }
 }
