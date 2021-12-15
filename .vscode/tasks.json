@@ -7,6 +7,27 @@
 			"command": "docker-compose up -d --build",
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "Kubernetes - Kompose convert",
+			"type": "shell",
+			"command": "kompose convert -o kubernetes.yml",
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Kubernetes - Apply",
+			"type": "shell",
+			"command": "kubectl apply -f kubernetes.yml",
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Kubernetes - Stop",
+			"type": "shell",
+			"command": "kubectl delete -f kubernetes.yml",
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }

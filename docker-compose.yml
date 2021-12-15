@@ -1,8 +1,13 @@
+version: "3"
 services:
   frontend1:
     build: ./frontend
+    ports:
+      - "80"
   frontend2:
     build: ./frontend
+    ports:
+      - "80"
 
   frontend-balancer:
     build: ./frontend-balancer
@@ -45,6 +50,8 @@ services:
     image: postgres
     environment:
       - "POSTGRES_PASSWORD=jizzle"
+    ports:
+      - "5432"
   posts-service:
     build: ./post-service
     environment:
@@ -52,12 +59,16 @@ services:
       - TWATTER_DB_HOST=posts-database
     links:
       - posts-database
+    ports:
+      - "34566"
 
   # charts
   charts-database:
     image: postgres
     environment:
       - "POSTGRES_PASSWORD=jizzle"
+    ports:
+      - "5432"
   charts-service:
     build: ./charts-service
     environment:
@@ -65,12 +76,16 @@ services:
       - TWATTER_DB_HOST=charts-database
     links:
       - charts-database
+    ports:
+      - "34567"
 
   # whiteboard
   whiteboards-database:
     image: postgres
     environment:
       - "POSTGRES_PASSWORD=jizzle"
+    ports:
+      - "5432"
   whiteboards-service:
     build: ./whiteboard-service
     environment:
