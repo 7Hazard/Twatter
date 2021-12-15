@@ -1,7 +1,9 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { Whiteboard } from "./Whiteboard";
 
-const sequelize = new Sequelize('postgres://postgres@localhost:5432/postgres', { logging: false })
+const dbhost = process.env["IS_CONTAINER"] ? "postgres:jizzle@whiteboards-database" : "postgres@localhost"
+
+const sequelize = new Sequelize(`postgres://${dbhost}:5432/postgres`, { logging: false })
 
 export async function connectDatabase() {
     try {

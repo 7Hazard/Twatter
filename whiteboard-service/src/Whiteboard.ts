@@ -1,6 +1,3 @@
-// // import "reflect-metadata";
-// import { Entity, Column, PrimaryColumn } from "typeorm";
-
 import { Model, Optional } from "sequelize";
 
 interface Attributes {

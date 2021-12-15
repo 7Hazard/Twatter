@@ -6,11 +6,11 @@ services:
 
   frontend-balancer:
     build: ./frontend-balancer
-    ports:
-      - "3000:80"
     links:
       - frontend1
       - frontend2
+    ports:
+      - "3000:80"
 
   # database:
   #   build: ./database
@@ -33,12 +33,12 @@ services:
       - TWATTER_DB_PW=${TWATTER_DB_PW}
       - TWATTER_GITHUB_CLIENT_SECRET=${TWATTER_GITHUB_CLIENT_SECRET}
       - TWATTER_IMGUR_CLIENT_ID=${TWATTER_IMGUR_CLIENT_ID}
-    ports:
-      - "8080:8080"
     links:
       - database
       - posts-service
       - charts-service
+    ports:
+      - "8080:8080"
 
   # posts
   posts-database:
@@ -65,3 +65,17 @@ services:
       - TWATTER_DB_HOST=charts-database
     links:
       - charts-database
+
+  # whiteboard
+  whiteboards-database:
+    image: postgres
+    environment:
+      - "POSTGRES_PASSWORD=jizzle"
+  whiteboards-service:
+    build: ./whiteboard-service
+    environment:
+      - IS_CONTAINER=1
+    links:
+      - whiteboards-database
+    ports:
+      - "34343:34343"
