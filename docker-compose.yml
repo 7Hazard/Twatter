@@ -1,49 +1,64 @@
 version: "3"
 services:
-  frontend1:
-    build: ./frontend
-    ports:
-      - "80"
-  frontend2:
-    build: ./frontend
-    ports:
-      - "80"
+  # frontend1:
+  #   build: ./frontend
+  #   ports:
+  #     - "80"
+  #   labels:
+  #     kompose.image-pull-policy: IfNotPresent
+  # frontend2:
+  #   build: ./frontend
+  #   ports:
+  #     - "80"
+  #   labels:
+  #     kompose.image-pull-policy: IfNotPresent
 
-  frontend-balancer:
-    build: ./frontend-balancer
-    links:
-      - frontend1
-      - frontend2
+  # frontend-balancer:
+  #   build: ./frontend-balancer
+  #   links:
+  #     - frontend1
+  #     - frontend2
+  #   ports:
+  #     - "3000:80"
+  #   labels:
+  #     kompose.service.type: nodeport
+  #     kompose.image-pull-policy: IfNotPresent
+
+  frontend:
+    build: ./frontend
     ports:
       - "3000:80"
+    image: localhost:5000/frontend
+    labels:
+      kompose.service.type: nodeport
+      kompose.image-pull-policy: IfNotPresent
 
-  # database:
-  #   build: ./database
-  #   environment:
-  #     - POSTGRES_PASSWORD=${TWATTER_DB_PW}
-  #   ports:
-  #     - "5432:5432"
-  database:
+  backend-database:
     image: postgres
     environment:
-      - "POSTGRES_PASSWORD=jizzle"
+      - POSTGRES_PASSWORD=jizzle
     ports:
-      - "5432:5432"
-
+      - 5432:5432
+    labels:
+      kompose.image-pull-policy: IfNotPresent
   backend:
     build: ./backend
     environment:
       - IS_CONTAINER=1
-      - TWATTER_DB_HOST=database
-      - TWATTER_DB_PW=${TWATTER_DB_PW}
+      - TWATTER_DB_HOST=backend-database
+      - TWATTER_DB_PW=jizzle
       - TWATTER_GITHUB_CLIENT_SECRET=${TWATTER_GITHUB_CLIENT_SECRET}
       - TWATTER_IMGUR_CLIENT_ID=${TWATTER_IMGUR_CLIENT_ID}
     links:
-      - database
+      - backend-database
       - posts-service
       - charts-service
     ports:
       - "8080:8080"
+    image: localhost:5000/backend
+    labels:
+      kompose.service.type: nodeport
+      kompose.image-pull-policy: IfNotPresent
 
   # posts
   posts-database:
@@ -52,6 +67,8 @@ services:
       - "POSTGRES_PASSWORD=jizzle"
     ports:
       - "5432"
+    labels:
+      kompose.image-pull-policy: IfNotPresent
   posts-service:
     build: ./post-service
     environment:
@@ -61,6 +78,9 @@ services:
       - posts-database
     ports:
       - "34566"
+    image: localhost:5000/posts-service
+    labels:
+      kompose.image-pull-policy: IfNotPresent
 
   # charts
   charts-database:
@@ -69,6 +89,8 @@ services:
       - "POSTGRES_PASSWORD=jizzle"
     ports:
       - "5432"
+    labels:
+      kompose.image-pull-policy: IfNotPresent
   charts-service:
     build: ./charts-service
     environment:
@@ -78,6 +100,9 @@ services:
       - charts-database
     ports:
       - "34567"
+    image: localhost:5000/charts-database
+    labels:
+      kompose.image-pull-policy: IfNotPresent
 
   # whiteboard
   whiteboards-database:
@@ -86,6 +111,8 @@ services:
       - "POSTGRES_PASSWORD=jizzle"
     ports:
       - "5432"
+    labels:
+      kompose.image-pull-policy: IfNotPresent
   whiteboards-service:
     build: ./whiteboard-service
     environment:
@@ -94,3 +121,7 @@ services:
       - whiteboards-database
     ports:
       - "34343:34343"
+    image: localhost:5000/whiteboards-database
+    labels:
+      kompose.service.type: nodeport
+      kompose.image-pull-policy: IfNotPresent
