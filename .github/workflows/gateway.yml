@@ -10,7 +10,7 @@ name: Gateway test, build & package
 on: [push, pull_request]
 
 jobs:
-  package:
+  test-build-package:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +37,7 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         title: Release ${{ github.run_number }}
+        automatic_release_tag: latest
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false
         files: |
