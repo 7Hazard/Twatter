@@ -23,6 +23,7 @@ jobs:
         distribution: 'adopt'
         
     - name: Change wrapper permissions
+      working-directory: backend
       run: chmod +x ./gradlew
       
     - name: Test with Gradle
