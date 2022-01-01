@@ -5,12 +5,12 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Gateway test, build & package
+name: Gateway test, build & release
 
 on: [push, pull_request]
 
 jobs:
-  test-build-package:
+  test-build-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,8 @@ jobs:
       working-directory: backend
       run: ./gradlew build
 
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - name: Release
+      uses: "marvinpinto/action-automatic-releases@latest"
       with:
         title: Release ${{ github.run_number }}
         automatic_release_tag: latest
