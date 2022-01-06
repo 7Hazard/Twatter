@@ -24,3 +24,21 @@ spring:
     init:
       mode: always
       platform: postgres
+
+server:
+  port: 8443
+  ssl:
+    key-alias: twatter
+    key-store: classpath:twatter.p12
+    key-store-type: pkcs12
+    key-store-password: jizzle
+    key-password: jizzle
+
+#    trust-store-type: pkcs12
+#    trust-store: classpath:twatter.p12
+#    trust-store-password: jizzle
+
+#    ciphers: ECDHE-RSA-AES128-GCM-SHA256,ECDHE-RSA-AES256-SHA384
+#    enabled-protocols: TLSv1.2
+#    enabled: true
+#    client-auth: need
