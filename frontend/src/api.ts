@@ -1,7 +1,7 @@
 import { deleteToken, getToken } from "./cookies"
 import { Post } from "./interfaces/Post"
 
-export const api = `http://localhost:8080`
+export const api = `https://localhost:8080`
 
 export async function authorizedPost(path: string, body = {}, invalidateToken = false) {
     let response = await fetch(`${api}/${path}`, {
